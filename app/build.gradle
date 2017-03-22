@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "peep.lxs.github.com.peep"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    greendao {
+        schemaVersion 1  //数据库版本号
+
+        daoPackage 'com.github.lxs.peep.db'
+        targetGenDir 'src/main/java'
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "me.tatarka:gradle-retrolambda:3.6.0"
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    // retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.0-RC1'
+    // rxjava
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.0@aar'
+    // rxbinding
+    //    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    //    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
+    //    compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
+    //    compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
+    // picture
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.chrisbanes:PhotoView:1.3.1'
+    // butterknife
+    compile 'com.jakewharton:butterknife:8.4.0'
+    // log
+    compile 'com.github.zhaokaiqiang.klog:library:1.5.0'
+    // leakcanary 检测内存泄漏
+    compile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    compile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    //greenDAO
+    compile 'org.greenrobot:greendao:3.2.0'
+    //dagger2
+    compile 'com.google.dagger:dagger:2.0.2'
+    compile 'com.google.dagger:dagger-compiler:2.0.2'
+    compile 'org.glassfish:javax.annotation:10.0-b28'
+}
