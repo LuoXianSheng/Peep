@@ -25,13 +25,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.github.obsessive.simplifyreader.widgets.LoadMoreListView
+        <com.github.lxs.peep.widget.LoadMoreListView
             android:id="@+id/common_swipe_refresh_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:cacheColorHint="@android:color/transparent"
-            android:divider="@drawable/common_list_divider"
-            android:dividerHeight="@dimen/one_px"
+            android:divider="@mipmap/common_list_divider"
+            android:dividerHeight="1dp"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"
             android:fadingEdge="none"

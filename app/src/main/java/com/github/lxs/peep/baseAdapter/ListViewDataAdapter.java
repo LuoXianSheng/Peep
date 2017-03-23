@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.lxs.peep.adapter;
+package com.github.lxs.peep.baseadapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A adapter using View Holder to display the item of a list view;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
  */
 public class ListViewDataAdapter<ItemDataType> extends ListViewDataAdapterBase<ItemDataType> {
 
-    protected ArrayList<ItemDataType> mItemDataList = new ArrayList<>();
+    protected List<ItemDataType> mItemDataList;
 
     public ListViewDataAdapter() {
 
@@ -35,12 +36,19 @@ public class ListViewDataAdapter<ItemDataType> extends ListViewDataAdapterBase<I
     /**
      * @param viewHolderCreator The view holder creator will create a View Holder that extends {@link ViewHolderBase}
      */
-    public ListViewDataAdapter(ViewHolderCreator<ItemDataType> viewHolderCreator) {
+    public ListViewDataAdapter(ViewHolderCreator<ItemDataType> viewHolderCreator, List<ItemDataType> mItemDataList) {
         super(viewHolderCreator);
+        this.mItemDataList = mItemDataList;
     }
 
-    public ArrayList<ItemDataType> getDataList() {
+    public List<ItemDataType> getDataList() {
         return mItemDataList;
+    }
+
+    public void refreshList(List<ItemDataType> mItemDataList) {
+        this.mItemDataList.clear();
+        this.mItemDataList.addAll(mItemDataList);
+        notifyDataSetChanged();
     }
 
     @Override

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.lxs.peep.adapter;
+package com.github.lxs.peep.baseadapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -9,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.squareup.leakcanary.RefWatcher;
-
 import butterknife.ButterKnife;
-import com.github.lxs.peep.App;
 
 public abstract class BaseFragment extends Fragment{
 
@@ -58,7 +55,7 @@ public abstract class BaseFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RefWatcher refWatcher = App.sRefWatcher;
-        refWatcher.watch(this);
+//        RefWatcher refWatcher = App.sRefWatcher;
+//        refWatcher.watch(this);
     }
 }

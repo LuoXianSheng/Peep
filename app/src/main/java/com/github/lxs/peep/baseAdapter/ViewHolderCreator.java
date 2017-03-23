@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.lxs.peep.adapter;
+package com.github.lxs.peep.baseadapter;
 
 /**
  * A interface that defines what a View Holder Creator should do.

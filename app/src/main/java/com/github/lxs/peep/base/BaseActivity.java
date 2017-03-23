@@ -14,9 +14,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutRes());
+        setContentView(setLayoutRes());
         ButterKnife.bind(this);
         mContext = this;
+        init();
     }
 
     protected void init() {
@@ -24,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initData();
     }
 
-    protected abstract int getLayoutRes();
+    protected abstract int setLayoutRes();
 
     protected abstract void initViews();
 
