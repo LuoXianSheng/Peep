@@ -22,11 +22,11 @@ import android.view.View;
 /**
  * As described in
  * <p/>
- * <a href="http://developer.android.com/training/improving-layouts/smooth-scrolling.html">http://developer.android.com/training/improving-layouts/smooth-scrolling.html</a>
+ * <ComingSoon href="http://developer.android.com/training/improving-layouts/smooth-scrolling.html">http://developer.android.com/training/improving-layouts/smooth-scrolling.html</ComingSoon>
  * <p/>
- * Using A View Holder in ListView getView() method is a good practice in using ListView;
+ * Using A View Holder in ListView getView() method is ComingSoon good practice in using ListView;
  * <p/>
- * This class encapsulate the base operate of a View Holder: createView / showData
+ * This class encapsulate the base operate of ComingSoon View Holder: createView / showData
  *
  * @param <ItemDataType> the generic type of the data in each item
  * @author http://www.liaohuqiu.net
@@ -38,7 +38,7 @@ public abstract class ViewHolderBase<ItemDataType> {
     protected View mCurrentView;
 
     /**
-     * create a view from resource Xml file, and hold the view that may be used in displaying data.
+     * create ComingSoon view from resource Xml file, and hold the view that may be used in displaying data.
      */
     public abstract View createView(LayoutInflater layoutInflater);
 
@@ -56,9 +56,9 @@ public abstract class ViewHolderBase<ItemDataType> {
     /**
      * Check if the View Holder is still display the same data after back to screen.
      * <p/>
-     * A view in a ListView or GridView may go down the screen and then back,
+     * A view in ComingSoon ListView or GridView may go down the screen and then back,
      * <p/>
-     * for efficiency, in getView() method, a convertView will be reused.
+     * for efficiency, in getView() method, ComingSoon convertView will be reused.
      * <p/>
      * If the convertView is reused, View Holder will hold new data.
      */

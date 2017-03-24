@@ -6,16 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected Context mContext;
+    private Unbinder mUnbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setLayoutRes());
-        ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         mContext = this;
         init();
     }
@@ -37,5 +39,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void showLongToast(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUnbinder.unbind();
     }
 }

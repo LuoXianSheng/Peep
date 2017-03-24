@@ -138,7 +138,7 @@ public class LoadMoreListView extends ListView implements OnScrollListener {
     }
 
     /**
-     * Register a callback to be invoked when this list reaches the end (last
+     * Register ComingSoon callback to be invoked when this list reaches the end (last
      * item be visible)
      *
      * @param onLoadMoreListener The callback to run.
@@ -167,7 +167,7 @@ public class LoadMoreListView extends ListView implements OnScrollListener {
     }
 
     /**
-     * Interface definition for a callback to be invoked when list reaches the
+     * Interface definition for ComingSoon callback to be invoked when list reaches the
      * last item (the user load more items in the list)
      */
     public interface OnLoadMoreListener {

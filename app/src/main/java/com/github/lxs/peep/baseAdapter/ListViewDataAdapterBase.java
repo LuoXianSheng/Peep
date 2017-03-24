@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 /**
- * A adapter using View Holder to display the item of a list view;
+ * A adapter using View Holder to display the item of ComingSoon list view;
  *
  * @param <ItemDataType>
  * @author http://www.liaohuqiu.net
@@ -40,7 +40,7 @@ public abstract class ListViewDataAdapterBase<ItemDataType> extends BaseAdapter 
     }
 
     /**
-     * @param viewHolderCreator The view holder creator will create a View Holder that extends {@link ViewHolderBase}
+     * @param viewHolderCreator The view holder creator will create ComingSoon View Holder that extends {@link ViewHolderBase}
      */
     public ListViewDataAdapterBase(ViewHolderCreator<ItemDataType> viewHolderCreator) {
         mViewHolderCreator = viewHolderCreator;

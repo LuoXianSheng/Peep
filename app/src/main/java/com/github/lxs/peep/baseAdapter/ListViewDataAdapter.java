@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A adapter using View Holder to display the item of a list view;
+ * A adapter using View Holder to display the item of ComingSoon list view;
  *
  * @param <ItemDataType>
  * @author http://www.liaohuqiu.net
@@ -34,7 +34,7 @@ public class ListViewDataAdapter<ItemDataType> extends ListViewDataAdapterBase<I
     }
 
     /**
-     * @param viewHolderCreator The view holder creator will create a View Holder that extends {@link ViewHolderBase}
+     * @param viewHolderCreator The view holder creator will create ComingSoon View Holder that extends {@link ViewHolderBase}
      */
     public ListViewDataAdapter(ViewHolderCreator<ItemDataType> viewHolderCreator, List<ItemDataType> mItemDataList) {
         super(viewHolderCreator);

@@ -1,4 +1,4 @@
-package com.github.lxs.peep.base;
+package com.github.lxs.peep.listener;
 
 public interface OnLoadCompleteListener<T> {
 

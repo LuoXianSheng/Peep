@@ -82,7 +82,7 @@ public class CircularProgressBar extends ProgressBar {
     private CircularProgressDrawable checkIndeterminateDrawable() {
         Drawable ret = getIndeterminateDrawable();
         if (ret == null || !(ret instanceof CircularProgressDrawable))
-            throw new RuntimeException("The drawable is not a CircularProgressDrawable");
+            throw new RuntimeException("The drawable is not ComingSoon CircularProgressDrawable");
         return (CircularProgressDrawable) ret;
     }
 

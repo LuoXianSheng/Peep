@@ -1,5 +1,6 @@
 package com.github.lxs.peep.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,18 +11,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
 
     protected View mRootView;
     protected Context mContext;
+    protected Activity mActivity;
+    private Unbinder unbinder;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        initRootView(inflater, container);
-        ButterKnife.bind(this, mRootView);
+        mRootView = initRootView(inflater, container);
+        unbinder = ButterKnife.bind(this, mRootView);
         return mRootView;
     }
 
@@ -34,11 +38,12 @@ public abstract class BaseFragment extends Fragment{
 
     protected void init() {
         mContext = getActivity();
+        mActivity = getActivity();
         initViews();
         initData();
     }
 
-    protected abstract void initRootView(LayoutInflater inflater, ViewGroup container) ;
+    protected abstract View initRootView(LayoutInflater inflater, ViewGroup container);
 
     protected abstract void initViews();
 
@@ -50,6 +55,12 @@ public abstract class BaseFragment extends Fragment{
 
     protected void showLongToast(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
