@@ -60,12 +60,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
             setAnimation(holder.itemView, position);
         }
         if (mOnClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnClickListener.setOnItemClickListener(v, position);
-                }
-            });
+            holder.itemView.setOnClickListener(v -> mOnClickListener.setOnItemClickListener(v, position));
         }
 
         holder.bindData(position);
@@ -81,8 +76,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         if (mData == null || mData.isEmpty()) {
             return TYPE_EMPTY;
         } else {
-            return TYPE_DEFAULT;
+            return getAdapterItemViewType(position);
         }
+    }
+
+    public int getAdapterItemViewType(int position) {
+        return TYPE_DEFAULT;
     }
 
     public void setEmptyView(int emptyLayout) {
@@ -124,6 +123,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
             mData = new ArrayList<>();
         }
         mData.add(item);
+        notifyDataSetChanged();
     }
 
     public List<T> getData() {

@@ -20,7 +20,7 @@ import butterknife.BindView;
  * Created by cl on 2017/3/24.
  */
 
-public class IndexChildFragment extends BaseFragment {
+public class ViewPagerFragment extends BaseFragment {
 
 
     @BindView(R.id.dy_live_index_child_viewpager)
@@ -28,30 +28,20 @@ public class IndexChildFragment extends BaseFragment {
     @BindView(R.id.dy_live_index_child_tab)
     SlidingTabLayout mTab;
 
-    private int idx;
-
     private ArrayList<Fragment> mFragments;
     private String[] titles = {"第一个", "二", "三个", "四个多啊"};
     private DYFragmentAdapter mAdapter;
 
-
-    public IndexChildFragment() {
-    }
-
-    public IndexChildFragment(int idx) {
-        this.idx = idx;
-    }
-
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_dy_index_child, null);
+        return inflater.inflate(R.layout.fragment_dy_viewpager, null);
     }
 
     @Override
     protected void init() {
         mFragments = new ArrayList<>();
         for (int i = 0; i < titles.length; i++)
-            mFragments.add(new IndexChildTwoFragment());
+            mFragments.add(new OtherFragment());
         super.init();
     }
 

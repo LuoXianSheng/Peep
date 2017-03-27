@@ -25,6 +25,13 @@
         </activity>
 
         <meta-data
+            android:name="design_width"
+            android:value="1080"/>
+        <meta-data
+            android:name="design_height"
+            android:value="1920"/>
+
+        <meta-data
             android:name="com.github.lxs.peep.image.GlideCache"
             android:value="GlideModule"/>
     </application>

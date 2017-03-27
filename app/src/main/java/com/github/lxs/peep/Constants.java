@@ -7,4 +7,5 @@ public class Constants {
     public static final boolean SHOW_DEBUG = true;
     public static String IMG_CACHE_PATH = SDCardUtils.getSDCardPath() + "/peep/imgCache";
 
+    public static String HTTP_CACHE_PATH = SDCardUtils.getSDCardPath() + "/peep/httpCache";
 }

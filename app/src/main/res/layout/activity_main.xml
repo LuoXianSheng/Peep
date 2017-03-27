@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.zhy.autolayout.AutoLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <com.zhy.autolayout.AutoFrameLayout
         android:id="@+id/layFrame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -16,4 +16,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"/>
-</LinearLayout>
+</com.zhy.autolayout.AutoLinearLayout>

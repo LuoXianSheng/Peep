@@ -94,8 +94,17 @@ dependencies {
     compile 'com.google.dagger:dagger-compiler:2.0.2'
     compile 'org.glassfish:javax.annotation:10.0-b28'
 
+    //轮播
+    compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'
+    compile 'cn.bingoogolapple:bga-adapter:1.1.8@aar'
+
+    //屏幕适配
+    compile 'com.zhy:autolayout:1.4.5'
+
     //weibo
     compile(name: 'openDefault-1.0.0-openDefaultRelease', ext: 'aar')
+
+    compile 'com.huxq17.xrefreshview:xrefreshview:3.6.2'
 
     //smarttablayout viewpager指示器
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'

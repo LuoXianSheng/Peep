@@ -15,7 +15,7 @@ import butterknife.BindView;
  * Created by cl on 2017/3/24.
  */
 
-public class IndexChildTwoFragment extends BaseFragment {
+public class OtherFragment extends BaseFragment {
 
 
     @BindView(R.id.listview)
@@ -23,7 +23,7 @@ public class IndexChildTwoFragment extends BaseFragment {
 
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_dy_index_child2, null);
+        return inflater.inflate(R.layout.fragment_dy_other, null);
     }
 
     @Override

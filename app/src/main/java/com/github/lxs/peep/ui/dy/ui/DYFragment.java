@@ -1,18 +1,18 @@
 package com.github.lxs.peep.ui.dy.ui;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.SparseArray;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
-import com.flyco.tablayout.SegmentTabLayout;
+import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.BaseFragment;
+import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -20,17 +20,16 @@ import butterknife.BindView;
  * Created by cl on 2017/3/24.
  */
 
-public class DYFragment extends BaseFragment implements OnTabSelectListener {
+public class DYFragment extends BaseFragment {
 
-    @BindView(R.id.dy_tab)
-    SegmentTabLayout mTab;
-    @BindView(R.id.dy_layFrame)
-    FrameLayout mLayFrame;
+    @BindView(R.id.dy_index_tab)
+    SlidingTabLayout mIndexTab;
+    @BindView(R.id.dy_index_viewpager)
+    ViewPager mIndexViewpager;
 
-    private String[] titles = {"首页", "直播"};
-    private SparseArray<Fragment> mSparseArray;
-    private FragmentManager mManager;
-
+    private DYFragmentAdapter mAdapter;
+    private ArrayList<Fragment> mFragments;
+    private String[] titles = {"首页", "全部直播", "第一个", "二", "四个多啊"};
 
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
@@ -39,43 +38,35 @@ public class DYFragment extends BaseFragment implements OnTabSelectListener {
 
     @Override
     protected void init() {
-        mSparseArray = new SparseArray<>();
+        mFragments = new ArrayList<>();
+        mFragments.add(new IndexFragment());
+        mFragments.add(new ViewPagerFragment());
+        for (int i = 0; i < titles.length - 2; i++)
+            mFragments.add(new OtherFragment());
         super.init();
     }
 
     @Override
     protected void initViews() {
-        mManager = getFragmentManager();
-        mManager.beginTransaction().add(R.id.dy_layFrame, buildFragment(0)).commitAllowingStateLoss();
-        mTab.setTabData(titles);
-        mTab.setOnTabSelectListener(this);
+        mIndexViewpager.setOffscreenPageLimit(2);
+        mAdapter = new DYFragmentAdapter(getChildFragmentManager(), mFragments);
+        mIndexViewpager.setAdapter(mAdapter);
+        mIndexTab.setViewPager(mIndexViewpager, titles);
+        mIndexTab.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int position) {
+                mIndexViewpager.setCurrentItem(position);
+            }
+
+            @Override
+            public void onTabReselect(int position) {
+
+            }
+        });
     }
 
     @Override
     protected void initData() {
 
-    }
-
-    @Override
-    public void onTabSelect(int position) {
-        FragmentTransaction transaction = mManager.beginTransaction();
-        if (mSparseArray.get(position, null) == null) {
-            transaction.hide(mSparseArray.get(0)).add(R.id.dy_layFrame, buildFragment(position));
-        } else transaction.hide(mSparseArray.get(position == 0 ? 1 : 0)).show(mSparseArray.get(position));
-        transaction.commitAllowingStateLoss();
-    }
-
-    @Override
-    public void onTabReselect(int position) {
-
-    }
-
-    private Fragment buildFragment(int position) {
-        if (position == 0)
-            mSparseArray.append(position, new IndexFragment());
-        else if (position == 1)
-            mSparseArray.append(position, new LiveFragment());
-        else return null;
-        return mSparseArray.get(position);
     }
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.bingoogolapple.bgabanner.BGABanner xmlns:android="http://schemas.android.com/apk/res/android"
+                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       android:id="@+id/bgAbabner"
+                                       style="@style/BannerDefaultStyle"
+                                       android:layout_width="match_parent"
+                                       android:orientation="vertical"
+                                       app:banner_indicatorGravity="bottom|left"
+                                       app:banner_pointDrawable="@drawable/bga_banner_selector_point_solid"
+                                       app:banner_transitionEffect="flip"/>
