@@ -1,6 +1,6 @@
 package com.github.lxs.peep.http;
 
-import com.github.lxs.peep.bean.Top250;
+import com.github.lxs.peep.bean.db.Top250;
 import com.github.lxs.peep.bean.dy.HomeCarousel;
 import com.github.lxs.peep.bean.dy.HomeColumnMoreAllList;
 import com.github.lxs.peep.bean.dy.HomeColumnMoreOtherList;

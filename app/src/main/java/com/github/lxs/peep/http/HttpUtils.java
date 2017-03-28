@@ -2,6 +2,7 @@ package com.github.lxs.peep.http;
 
 import android.content.Context;
 
+import com.github.lxs.peep.App;
 import com.github.lxs.peep.utils.NetworkUtils;
 import com.socks.library.KLog;
 
@@ -221,11 +222,11 @@ public class HttpUtils {
      *
      * @return
      */
-    public static HttpUtils getInstance(Context context) {
+    public static HttpUtils getInstance() {
         if (mInstance == null) {
             synchronized (HttpUtils.class) {
                 if (mInstance == null) {
-                    mInstance = new HttpUtils(context);
+                    mInstance = new HttpUtils(App.getApplication());
                 }
             }
         }

@@ -12,11 +12,6 @@ public class BasePresenter<V> {
         mView = v;
     }
 
-    public BasePresenter() {
-
-    }
-
-
     public void onDestroy() {
         mView = null;
     }

@@ -6,33 +6,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.andview.refreshview.recyclerview.BaseRecyclerAdapter;
 import com.github.lxs.peep.R;
-import com.github.lxs.peep.baseadapter.BaseViewHolder;
 import com.github.lxs.peep.bean.dy.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.HomeHotColumn;
 import com.github.lxs.peep.bean.dy.HomeRecommendHotCate;
-import com.github.lxs.peep.ui.dy.ui.adapter.FaceScoreAdapter;
-import com.github.lxs.peep.ui.dy.ui.adapter.HotAdapter;
-import com.github.lxs.peep.ui.dy.ui.adapter.OtherAllAdapter;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
- * Created by cl on 2017/3/27.
+ * Created by cl on 2017/3/28.
  */
 
-public class IndexAdapter extends BaseRecyclerAdapter {
+public class IndexAdapter extends BaseAdapter {
 
     public static final int TYPE_1 = 1;//最热
     public static final int TYPE_2 = 2;//颜值
     public static final int TYPE_3 = 3;//其它所有
+
+    private static final int MAX_TYPE = 3;
 
     private HotAdapter mHotAdapter;
     private List<HomeHotColumn> mHotColumns;
@@ -41,100 +43,142 @@ public class IndexAdapter extends BaseRecyclerAdapter {
     private List<HomeFaceScoreColumn> mFaceScoreColumns;
 
     private OtherAllAdapter mOtherAllAdapter;
-    private List<HomeRecommendHotCate> mRecommendHotCates;
+    private List<HomeRecommendHotCate> mOtherAllColumns;
+
+    private Hot mHot;
 
     private Context mContext;
 
     public IndexAdapter(Context context) {
         mContext = context;
 
-        mHotAdapter = new HotAdapter(mContext);
+
         mHotColumns = new ArrayList<>();
 
         mFaceScoreAdapter = new FaceScoreAdapter(mContext);
         mFaceScoreColumns = new ArrayList<>();
 
         mOtherAllAdapter = new OtherAllAdapter(mContext);
-        mRecommendHotCates = new ArrayList<>();
+        mOtherAllColumns = new ArrayList<>();
+    }
+
+    private int size;
+
+    @Override
+    public int getCount() {
+        return size + 2;//加上hot，Face
     }
 
     @Override
-    public RecyclerView.ViewHolder getViewHolder(View view) {
-        return new A(view);
+    public Object getItem(int position) {
+        return null;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType, boolean isItem) {
-        KLog.e(viewType);
-        return new ContentViewHolder(LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false));
-//        switch (viewType) {
-//            case TYPE_1:
-//                return new ContentViewHolder(LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false));
-//            case TYPE_2:
-//                return new ContentViewHolder(LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false));
-//            case TYPE_3:
-//                return new ContentViewHolder(LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false));
-//            default:
-//                return null;
-//        }
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, boolean isItem) {
-        KLog.e(position);
-        if (position == TYPE_1) {
-
-        } else if (position == TYPE_2) {
-
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_1;
+        } else if (position == 1) {
+            return TYPE_2;
         } else {
-
+            return TYPE_3;
         }
     }
 
     @Override
-    public int getAdapterItemViewType(int position) {
-        switch (position) {
-            case 1:
-                return TYPE_1;
-            case 2:
-                return TYPE_2;
-            default:
-                return TYPE_3;
-        }
+    public int getViewTypeCount() {
+        return MAX_TYPE;
     }
 
     @Override
-    public int getAdapterItemCount() {
-        return mRecommendHotCates.size();
+    public View getView(int position, View convertView, ViewGroup parent) {
+        int viewType = getItemViewType(position);
+        KLog.e(viewType + "-----viewType");
+        ViewHolder mHolder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false);
+            switch (viewType) {
+                case TYPE_1:
+                    break;
+                case TYPE_2:
+//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false);
+                    break;
+                case TYPE_3:
+//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false);
+                    break;
+            }
+            mHolder = new ViewHolder(convertView);
+            convertView.setTag(mHolder);
+        } else {
+            mHolder = (ViewHolder) convertView.getTag();
+        }
+        switch (viewType) {
+            case TYPE_1:
+//                mHotAdapter = new HotAdapter(mContext);
+//                mHolder.mTitle.setText("最热");
+//                mHolder.mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
+//                mHolder.mRvColumnList.setAdapter(mHotAdapter);
+//                String[] data = {"a", "a", "a", "a", "a", "a"};
+//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, data);
+                mHot = new Hot(new ArrayList<>(), mContext);
+                mHolder.mRvColumnList.setAdapter(mHot);
+                break;
+            case TYPE_2:
+//                mFaceScoreAdapter = new FaceScoreAdapter(mContext);
+//                mHolder.mTitle.setText("第二热");
+//                mHolder.mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
+//                mHolder.mRvColumnList.setAdapter(mFaceScoreAdapter);
+                break;
+            case TYPE_3:
+//                mOtherAllAdapter = new OtherAllAdapter(mContext);
+//                mHolder.mTitle.setText("不热");
+//                mHolder.mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
+//                mHolder.mRvColumnList.setAdapter(mOtherAllAdapter);
+                break;
+        }
+        return convertView;
     }
 
-    class ContentViewHolder extends BaseViewHolder {
+    public void refreshHotListData(List<HomeHotColumn> mHotColumns) {
+//        KLog.e(mHotColumns.size() + "-------------mHotColumns");
+//        mHotAdapter.addData(mHotColumns);
+//        mHotAdapter.notifyDataSetChanged();
+        size = mHotColumns.size();
+//        notifyDataSetChanged();
+        mHot.refreshListData(mHotColumns);
+        notifyDataSetChanged();
+    }
+
+//    public void refreshFaceScoreListData(List<HomeFaceScoreColumn> mFaceScoreColumns) {
+//        KLog.e(mFaceScoreColumns.size() + "-------------mFaceScoreColumns");
+//        mFaceScoreAdapter.addData(mFaceScoreColumns);
+//        mFaceScoreAdapter.notifyDataSetChanged();
+//    }
+//
+//    public void refreshOtherAllListData(List<HomeRecommendHotCate> mOtherAllColumns) {
+//        KLog.e(mOtherAllColumns.size() + "-------------mOtherAllColumns");
+//        mOtherAllAdapter.addData(mOtherAllColumns);
+//        mOtherAllAdapter.notifyDataSetChanged();
+//        this.mOtherAllColumns = mOtherAllColumns;
+//        notifyDataSetChanged();
+//    }
+
+
+    class ViewHolder {
         @BindView(R.id.item_icon)
         ImageView mItemIcon;
-        @BindView(R.id.rv_column_list)
-        RecyclerView mRvColumnList;
+        @BindView(R.id.title)
+        TextView mTitle;
+        @BindView(R.id.gridView)
+        GridView mRvColumnList;
 
-        public ContentViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        @Override
-        public void bindData(int position) {
-            HomeHotColumn item = mHotAdapter.getData().get(position);
-            mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
-            mRvColumnList.setAdapter(mHotAdapter);
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
         }
     }
-
-    class A extends RecyclerView.ViewHolder {
-        @BindView(R.id.item_icon)
-        ImageView mItemIcon;
-        @BindView(R.id.rv_column_list)
-        RecyclerView mRvColumnList;
-
-        public A(View itemView) {
-            super(itemView);
-        }
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.github.lxs.peep.bean;
+package com.github.lxs.peep.bean.db;
 
 import java.util.List;
 

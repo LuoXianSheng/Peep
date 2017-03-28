@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.baseadapter.BaseAdapter;
 import com.github.lxs.peep.baseadapter.BaseViewHolder;
-import com.github.lxs.peep.bean.dy.IndexCateList;
 
 import butterknife.BindView;
 
@@ -18,13 +17,15 @@ import butterknife.BindView;
  * Created by cl on 2017/3/27.
  */
 
-public class MenuAdapter extends BaseAdapter<IndexCateList> {
+public class MenuAdapter extends BaseAdapter<String> {
 
     private Context mContext;
+    private MenuItemClick onClick;
 
-    public MenuAdapter(Context context) {
+    public MenuAdapter(Context context, MenuItemClick onClick) {
         super(context);
         mContext = context;
+        this.onClick = onClick;
     }
 
     public MenuAdapter(Context context, boolean useAnimation) {
@@ -38,7 +39,6 @@ public class MenuAdapter extends BaseAdapter<IndexCateList> {
     }
 
     class CateListViewHolder extends BaseViewHolder {
-
         @BindView(R.id.img)
         ImageView mImg;
         @BindView(R.id.text)
@@ -50,8 +50,12 @@ public class MenuAdapter extends BaseAdapter<IndexCateList> {
 
         @Override
         public void bindData(int position) {
-            IndexCateList item = mData.get(position);
-            mText.setText(item.getTitle());
+            mText.setText(mData.get(position));
+            itemView.setOnClickListener(v -> onClick.onMenuItemClick(position));
         }
+    }
+
+    public interface MenuItemClick {
+        void onMenuItemClick(int position);
     }
 }

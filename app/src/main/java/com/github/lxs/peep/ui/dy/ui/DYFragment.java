@@ -41,7 +41,9 @@ public class DYFragment extends BaseFragment {
         mFragments = new ArrayList<>();
         mFragments.add(new IndexFragment());
         mFragments.add(new ViewPagerFragment());
-        for (int i = 0; i < titles.length - 2; i++)
+//        for (int i = 0; i < titles.length - 2; i++)
+            mFragments.add(new OtherFragment());
+            mFragments.add(new OtherFragment());
             mFragments.add(new OtherFragment());
         super.init();
     }

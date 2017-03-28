@@ -49,8 +49,5 @@ public abstract class BaseDelayedLoadFragment extends MvpFragment {
         mHandler.removeCallbacks(mRunnable);
     }
 
-    /**
-     * 延迟加载 子类必须重写此方法
-     */
     protected abstract void loadData();
 }
