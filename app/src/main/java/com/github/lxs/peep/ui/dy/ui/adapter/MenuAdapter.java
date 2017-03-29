@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.baseadapter.BaseAdapter;
 import com.github.lxs.peep.baseadapter.BaseViewHolder;
+import com.github.lxs.peep.image.GlideTransform;
 
 import butterknife.BindView;
 
@@ -21,6 +23,14 @@ public class MenuAdapter extends BaseAdapter<String> {
 
     private Context mContext;
     private MenuItemClick onClick;
+    private String[] iconUrl = {"https://staticlive.douyucdn.cn//upload//game_cate//f719087663581b7a723c4d39f8721bc1.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//67b6c31daee46b0e9d9ec9d420721149.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//d3e0073bfb714186ab0c818744601963.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//ac9e22d6b80cb57b878e6fa3cca15400.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//ac9e22d6b80cb57b878e6fa3cca15400.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//ac9e22d6b80cb57b878e6fa3cca15400.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//ac9e22d6b80cb57b878e6fa3cca15400.jpg",
+            "https://staticlive.douyucdn.cn//upload//game_cate//ac9e22d6b80cb57b878e6fa3cca15400.jpg"};
 
     public MenuAdapter(Context context, MenuItemClick onClick) {
         super(context);
@@ -52,6 +62,11 @@ public class MenuAdapter extends BaseAdapter<String> {
         public void bindData(int position) {
             mText.setText(mData.get(position));
             itemView.setOnClickListener(v -> onClick.onMenuItemClick(position));
+            Glide.with(mContext)
+                    .load(iconUrl[position])
+                    .dontAnimate()
+                    .transform(new GlideTransform(mContext, GlideTransform.CIRCLE))
+                    .into(mImg);
         }
     }
 

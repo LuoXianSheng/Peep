@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.andview.refreshview.XRefreshView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/refreshView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:isHeightMatchParent="true"
+    app:isWidthMatchParent="true">
 
-    <com.zhy.autolayout.AutoLinearLayout
+    <ListView
+        android:id="@+id/dy_index_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ListView
-            android:id="@+id/dy_index_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.zhy.autolayout.AutoLinearLayout>
-
+        android:layout_height="wrap_content"
+        android:background="#EEEEEE"
+        android:divider="@null"
+        android:dividerHeight="10dp"
+        android:scrollbars="none"/>
 
 </com.andview.refreshview.XRefreshView>

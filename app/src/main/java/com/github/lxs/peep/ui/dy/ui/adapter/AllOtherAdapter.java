@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
-import com.github.lxs.peep.bean.dy.HomeHotColumn;
-import com.socks.library.KLog;
+import com.github.lxs.peep.bean.dy.HomeRecommendHotCate;
 
 import java.util.List;
 
@@ -22,12 +22,12 @@ import butterknife.ButterKnife;
  * Created by cl on 2017/3/28.
  */
 
-public class Hot extends BaseAdapter {
+public class AllOtherAdapter extends BaseAdapter {
 
-    private List<HomeHotColumn> mList;
+    private List<HomeRecommendHotCate.RoomListEntity> mList;
     private Context mContext;
 
-    public Hot(List<HomeHotColumn> list, Context context) {
+    public AllOtherAdapter(List<HomeRecommendHotCate.RoomListEntity> list, Context context) {
         mList = list;
         mContext = context;
     }
@@ -55,27 +55,28 @@ public class Hot extends BaseAdapter {
             mHolder = new ViewHolder(convertView);
             convertView.setTag(mHolder);
         } else mHolder = (ViewHolder) convertView.getTag();
-        KLog.e(position + "--------------------------" + mList.get(position).getRoom_src());
+        HomeRecommendHotCate.RoomListEntity item = mList.get(position);
         Glide.with(mContext)
-                .load(mList.get(position).getRoom_src())
+                .load(item.getRoom_src())
                 .crossFade()
                 .placeholder(R.mipmap.dy_image_loading)
                 .error(R.mipmap.dy_image_error)
                 .into(mHolder.mRoomImg);
+        mHolder.mTvOnlineNum.setText(item.getOnline() + "");
+        mHolder.mTvName.setText(item.getNickname());
+        mHolder.mTvRoomName.setText(item.getRoom_name());
         return convertView;
     }
 
-    public void refreshListData(List<HomeHotColumn> mHotColumns) {
-        mList.clear();
-        for (int i = 0; i < mHotColumns.size(); i++) {
-            mList.add(mHotColumns.get(i));
-        }
-        notifyDataSetChanged();
-    }
-
-    static class ViewHolder {
+    class ViewHolder {
         @BindView(R.id.room_img)
         ImageView mRoomImg;
+        @BindView(R.id.tv_online_num)
+        TextView mTvOnlineNum;
+        @BindView(R.id.tv_name)
+        TextView mTvName;
+        @BindView(R.id.tv_room_name)
+        TextView mTvRoomName;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

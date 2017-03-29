@@ -1,6 +1,5 @@
 package com.github.lxs.peep.ui.dy.model;
 
-import com.github.lxs.peep.bean.dy.Dy;
 import com.github.lxs.peep.bean.dy.HomeCarousel;
 import com.github.lxs.peep.bean.dy.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.HomeHotColumn;
@@ -151,69 +150,5 @@ public class IndexModel {
                     }
                 });
     }
-
-//    public void loadTest(OnLoadCompleteListener<Dy> listener) {
-//        Dy dy = new Dy();
-//        HttpUtils.getInstance()
-//                .getRetofitClinet()
-//                .builder(ApiManager.DyApi.class)
-//                .getHotColumn(ParamsMapUtils.getDefaultParams())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .map(HttpResponse::getData)
-//                .subscribe(new MySubscriber<List<HomeHotColumn>>() {
-//                    @Override
-//                    public void onSuccess(List<HomeHotColumn> homeHotColumns) {
-//                        dy.setHotColumns(homeHotColumns);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        KLog.e(e.getMessage());
-//                        listener.onLoadFailed("失败");
-//                    }
-//                });
-//
-//        HttpUtils.getInstance()
-//                .getRetofitClinet()
-//                .builder(ApiManager.DyApi.class)
-//                .getFaceScoreColumn(ParamsMapUtils.getHomeFaceScoreColumn(0, 4))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .map(HttpResponse::getData)
-//                .subscribe(new MySubscriber<List<HomeFaceScoreColumn>>() {
-//                    @Override
-//                    public void onSuccess(List<HomeFaceScoreColumn> columns) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        KLog.e(e.getMessage());
-//                        listener.onLoadFailed("失败");
-//                    }
-//                });
-//
-//        HttpUtils.getInstance()
-//                .getRetofitClinet()
-//                .builder(ApiManager.DyApi.class)
-//                .getHotCate(ParamsMapUtils.getDefaultParams())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .map(HttpResponse::getData)
-//                .subscribe(new MySubscriber<List<HomeRecommendHotCate>>() {
-//                    @Override
-//                    public void onSuccess(List<HomeRecommendHotCate> homeRecommendHotCates) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        KLog.e(e.getMessage());
-//                        listener.onLoadFailed("失败");
-//                    }
-//                });
-//    }
-
 
 }

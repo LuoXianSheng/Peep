@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/dy_colorPrimary</item>
+        <item name="colorPrimaryDark">@color/dy_colorPrimaryDark</item>
+        <item name="colorAccent">@color/dy_colorAccent</item>
     </style>
 
     <style name="CPB" parent="Widget.AppCompat.ProgressBar"/>
@@ -26,7 +26,7 @@
         <!-- 开启自动轮播 -->
         <item name="banner_pointAutoPlayAble">true</item>
         <!-- 自动轮播的时间间隔 -->
-        <item name="banner_pointAutoPlayInterval">3000</item>
+        <item name="banner_pointAutoPlayInterval">4000</item>
         <!-- 指示点容器背景 -->
         <item name="banner_pointContainerBackground">#44aaaaaa</item>
         <!-- 指示点背景 -->

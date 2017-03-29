@@ -1,5 +1,6 @@
 package com.github.lxs.peep.ui.main.ui;
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +13,7 @@ import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.BaseActivity;
 import com.github.lxs.peep.ui.dy.ui.DYFragment;
 import com.github.lxs.peep.ui.wb.ui.TwoFragment;
+import com.github.lxs.peep.utils.StatusBarUtil;
 
 import butterknife.BindView;
 
@@ -41,6 +43,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected void initViews() {
+        StatusBarUtil.setColor(this, Color.parseColor("#FF7700"), 0);
+//        changeTheme(R.style.DbTheme);
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().add(R.id.layFrame, buildFragment(0)).commitAllowingStateLoss();
         initNavigationBar();
@@ -48,11 +52,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private void initNavigationBar() {
         mNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
-        mNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
-        mNavigationBar.addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "Home"))
-                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "Books"))
-                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "Music"))
-                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "TV"))
+        mNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_RIPPLE);
+        mNavigationBar.addItem(new BottomNavigationItem(R.mipmap.icon_dy, "Home").setActiveColor(Color.parseColor("#FF7700")))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "Books").setActiveColor(Color.parseColor("#02BF5B")))
+                .addItem(new BottomNavigationItem(R.mipmap.icon_dy, "Music").setActiveColor(Color.DKGRAY))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "TV").setActiveColor(Color.YELLOW))
                 .initialise();
         mNavigationBar.setTabSelectedListener(this);
     }
@@ -70,6 +74,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             transaction.add(R.id.layFrame, buildFragment(position));
         } else transaction.show(mSparseArray.get(position));
         transaction.commitAllowingStateLoss();
+        if (position == 0)
+            StatusBarUtil.setColor(this, Color.parseColor("#FF7700"), 0);
+        else if (position == 1)
+            StatusBarUtil.setColor(this, Color.parseColor("#02BF5B"), 0);
     }
 
     @Override

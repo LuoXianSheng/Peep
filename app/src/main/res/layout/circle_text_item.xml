@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.autolayout.AutoLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                     android:id="@+id/item"
-                                     android:layout_width="match_parent"
-                                     android:layout_height="match_parent"
-                                     android:orientation="vertical">
+<com.zhy.autolayout.AutoLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingTop="10dp">
 
     <ImageView
         android:id="@+id/img"
@@ -18,5 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
-        android:text="1111"/>
+        android:text="1111"
+        android:textSize="13sp"/>
 </com.zhy.autolayout.AutoLinearLayout>

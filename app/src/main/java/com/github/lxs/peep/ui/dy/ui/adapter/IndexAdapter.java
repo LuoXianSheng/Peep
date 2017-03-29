@@ -1,22 +1,21 @@
 package com.github.lxs.peep.ui.dy.ui.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.HomeHotColumn;
 import com.github.lxs.peep.bean.dy.HomeRecommendHotCate;
-import com.socks.library.KLog;
+import com.github.lxs.peep.image.GlideTransform;
+import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,43 +29,38 @@ import butterknife.ButterKnife;
 
 public class IndexAdapter extends BaseAdapter {
 
-    public static final int TYPE_1 = 1;//最热
-    public static final int TYPE_2 = 2;//颜值
-    public static final int TYPE_3 = 3;//其它所有
+    private static final int TYPE_1 = 0;//最热
+    private static final int TYPE_2 = 1;//颜值
+    private static final int TYPE_3 = 2;//其它所有
 
     private static final int MAX_TYPE = 3;
 
-    private HotAdapter mHotAdapter;
     private List<HomeHotColumn> mHotColumns;
 
-    private FaceScoreAdapter mFaceScoreAdapter;
     private List<HomeFaceScoreColumn> mFaceScoreColumns;
 
-    private OtherAllAdapter mOtherAllAdapter;
     private List<HomeRecommendHotCate> mOtherAllColumns;
 
-    private Hot mHot;
+    private HotAdapter mHotAdapter;
+    private FaceScoreAdapter mFaceScoreAdapter;
 
     private Context mContext;
 
     public IndexAdapter(Context context) {
         mContext = context;
 
-
         mHotColumns = new ArrayList<>();
+        mHotAdapter = new HotAdapter(mHotColumns, mContext);
 
-        mFaceScoreAdapter = new FaceScoreAdapter(mContext);
         mFaceScoreColumns = new ArrayList<>();
+        mFaceScoreAdapter = new FaceScoreAdapter(mFaceScoreColumns, mContext);
 
-        mOtherAllAdapter = new OtherAllAdapter(mContext);
         mOtherAllColumns = new ArrayList<>();
     }
 
-    private int size;
-
     @Override
     public int getCount() {
-        return size + 2;//加上hot，Face
+        return mOtherAllColumns.size() + 2;//加上hot，face
     }
 
     @Override
@@ -98,75 +92,69 @@ public class IndexAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int viewType = getItemViewType(position);
-        KLog.e(viewType + "-----viewType");
         ViewHolder mHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false);
-            switch (viewType) {
-                case TYPE_1:
-                    break;
-                case TYPE_2:
-//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false);
-                    break;
-                case TYPE_3:
-//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_item, parent, false);
-                    break;
-            }
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_gridview, parent, false);
+//            switch (viewType) {
+//                case TYPE_1:
+//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_gridview, parent, false);
+//                    break;
+//                case TYPE_2:
+//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_gridview, parent, false);
+//                    break;
+//                case TYPE_3:
+//                    convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_cate_gridview, parent, false);
+//                    break;
+//            }
             mHolder = new ViewHolder(convertView);
             convertView.setTag(mHolder);
+            AutoUtils.autoSize(convertView);
         } else {
             mHolder = (ViewHolder) convertView.getTag();
         }
         switch (viewType) {
             case TYPE_1:
-//                mHotAdapter = new HotAdapter(mContext);
-//                mHolder.mTitle.setText("最热");
-//                mHolder.mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
-//                mHolder.mRvColumnList.setAdapter(mHotAdapter);
-//                String[] data = {"a", "a", "a", "a", "a", "a"};
-//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, data);
-                mHot = new Hot(new ArrayList<>(), mContext);
-                mHolder.mRvColumnList.setAdapter(mHot);
+                mHolder.mTitle.setText("最热");
+                mHolder.mRvColumnList.setAdapter(mHotAdapter);
+                mHolder.mItemIcon.setImageResource(R.mipmap.icon_hot);
                 break;
             case TYPE_2:
-//                mFaceScoreAdapter = new FaceScoreAdapter(mContext);
-//                mHolder.mTitle.setText("第二热");
-//                mHolder.mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
-//                mHolder.mRvColumnList.setAdapter(mFaceScoreAdapter);
+                mHolder.mRvColumnList.setAdapter(mFaceScoreAdapter);
+                mHolder.mTitle.setText("颜值");
+                mHolder.mItemIcon.setImageResource(R.mipmap.icon_facescore);
                 break;
             case TYPE_3:
-//                mOtherAllAdapter = new OtherAllAdapter(mContext);
-//                mHolder.mTitle.setText("不热");
-//                mHolder.mRvColumnList.setLayoutManager(new GridLayoutManager(mContext, 2));
-//                mHolder.mRvColumnList.setAdapter(mOtherAllAdapter);
+                HomeRecommendHotCate item = mOtherAllColumns.get(position - 2);
+                AllOtherAdapter allOtherAdapter = new AllOtherAdapter(item.getRoom_list(), mContext);
+                mHolder.mRvColumnList.setAdapter(allOtherAdapter);
+                mHolder.mTitle.setText(item.getTag_name());
+                Glide.with(mContext)
+                        .load(item.getIcon_url())
+                        .dontAnimate()
+                        .transform(new GlideTransform(mContext, GlideTransform.CIRCLE))
+                        .into(mHolder.mItemIcon);
                 break;
         }
         return convertView;
     }
 
     public void refreshHotListData(List<HomeHotColumn> mHotColumns) {
-//        KLog.e(mHotColumns.size() + "-------------mHotColumns");
-//        mHotAdapter.addData(mHotColumns);
-//        mHotAdapter.notifyDataSetChanged();
-        size = mHotColumns.size();
-//        notifyDataSetChanged();
-        mHot.refreshListData(mHotColumns);
-        notifyDataSetChanged();
+        this.mHotColumns.clear();
+        this.mHotColumns.addAll(mHotColumns);
+        mHotAdapter.refreshListData(mHotColumns);
     }
 
-//    public void refreshFaceScoreListData(List<HomeFaceScoreColumn> mFaceScoreColumns) {
-//        KLog.e(mFaceScoreColumns.size() + "-------------mFaceScoreColumns");
-//        mFaceScoreAdapter.addData(mFaceScoreColumns);
-//        mFaceScoreAdapter.notifyDataSetChanged();
-//    }
-//
-//    public void refreshOtherAllListData(List<HomeRecommendHotCate> mOtherAllColumns) {
-//        KLog.e(mOtherAllColumns.size() + "-------------mOtherAllColumns");
-//        mOtherAllAdapter.addData(mOtherAllColumns);
-//        mOtherAllAdapter.notifyDataSetChanged();
-//        this.mOtherAllColumns = mOtherAllColumns;
-//        notifyDataSetChanged();
-//    }
+    public void refreshFaceScoreListData(List<HomeFaceScoreColumn> mFaceScoreColumns) {
+        this.mFaceScoreColumns.clear();
+        this.mFaceScoreColumns.addAll(mFaceScoreColumns);
+        mFaceScoreAdapter.refreshListData(mFaceScoreColumns);
+    }
+
+    public void refreshOtherAllListData(List<HomeRecommendHotCate> mOtherAllColumns) {
+        this.mOtherAllColumns.clear();
+        this.mOtherAllColumns.addAll(mOtherAllColumns);
+        notifyDataSetChanged();
+    }
 
 
     class ViewHolder {

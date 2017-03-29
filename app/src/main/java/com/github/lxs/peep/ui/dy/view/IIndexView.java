@@ -22,4 +22,6 @@ public interface IIndexView extends BaseView {
     void setFaceScoreColumns(List<HomeFaceScoreColumn> homeFaceScoreColumns);
 
     void setOtherAllColumns(List<HomeRecommendHotCate> homeRecommendHotCates);
+
+    void showError(String error);
 }

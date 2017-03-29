@@ -29,17 +29,15 @@ public class IndexPresenter extends BasePresenter<IIndexView> {
     }
 
     public void loadBGAData() {
-        mView.showLoading();
         mIndexModel.loadBGAData(new OnLoadCompleteListener<List<String>>() {
             @Override
             public void onLoadSuccess(List<String> strings) {
                 mIIndexView.setBGAData(strings);
-                mView.hideLoading();
             }
 
             @Override
             public void onLoadFailed(String error) {
-
+                mView.hideLoading();
             }
         });
     }
@@ -53,7 +51,7 @@ public class IndexPresenter extends BasePresenter<IIndexView> {
 
             @Override
             public void onLoadFailed(String error) {
-
+                mView.hideLoading();
             }
         });
     }
@@ -68,7 +66,7 @@ public class IndexPresenter extends BasePresenter<IIndexView> {
 
             @Override
             public void onLoadFailed(String error) {
-
+                mView.hideLoading();
             }
         });
     }
@@ -82,7 +80,7 @@ public class IndexPresenter extends BasePresenter<IIndexView> {
 
             @Override
             public void onLoadFailed(String error) {
-
+                mView.hideLoading();
             }
         });
     }
@@ -92,16 +90,14 @@ public class IndexPresenter extends BasePresenter<IIndexView> {
             @Override
             public void onLoadSuccess(List<HomeRecommendHotCate> homeRecommendHotCates) {
                 mIIndexView.setOtherAllColumns(homeRecommendHotCates);
+                mView.hideLoading();
             }
 
             @Override
             public void onLoadFailed(String error) {
-
+                mView.hideLoading();
+                mIIndexView.showError(error);
             }
         });
-    }
-
-    public void loadTest() {
-
     }
 }
