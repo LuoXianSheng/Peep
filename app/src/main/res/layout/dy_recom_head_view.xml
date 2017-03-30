@@ -10,12 +10,13 @@
         android:id="@+id/bgAbabner"
         style="@style/BannerDefaultStyle"
         android:orientation="vertical"
-        app:banner_indicatorGravity="bottom|right"
+        app:banner_indicatorGravity="bottom|center_horizontal"
         app:banner_pointDrawable="@drawable/bga_banner_selector_point_solid"
-        app:banner_transitionEffect="cube"/>
+        app:banner_transitionEffect="accordion"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 </com.zhy.autolayout.AutoLinearLayout>

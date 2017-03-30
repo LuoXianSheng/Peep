@@ -59,8 +59,8 @@ public class AllOtherAdapter extends BaseAdapter {
         Glide.with(mContext)
                 .load(item.getRoom_src())
                 .crossFade()
-                .placeholder(R.mipmap.dy_image_loading)
-                .error(R.mipmap.dy_image_error)
+                .placeholder(R.mipmap.dy_img_loading)
+                .error(R.mipmap.dy_img_loading_error)
                 .into(mHolder.mRoomImg);
         mHolder.mTvOnlineNum.setText(item.getOnline() + "");
         mHolder.mTvName.setText(item.getNickname());

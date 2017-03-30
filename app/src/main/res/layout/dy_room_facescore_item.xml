@@ -57,7 +57,7 @@
             android:layout_alignBottom="@+id/tv_name"
             android:layout_alignTop="@+id/tv_name"
             android:layout_marginLeft="5dp"
-            android:src="@mipmap/icon_host_name"/>
+            android:src="@mipmap/icon_host_name_black"/>
 
         <TextView
             android:id="@+id/tv_name"

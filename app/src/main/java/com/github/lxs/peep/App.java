@@ -2,21 +2,15 @@ package com.github.lxs.peep;
 
 import android.app.Application;
 
-import com.github.lxs.peep.di.component.AppComponent;
-import com.github.lxs.peep.di.component.DaggerAppComponent;
-import com.github.lxs.peep.di.module.AppModule;
 import com.github.lxs.peep.http.HttpUrl;
 import com.github.lxs.peep.http.HttpUtils;
 import com.github.lxs.peep.http.NetWorkConfiguration;
 import com.socks.library.KLog;
 
-import java.io.File;
-
 public class App extends Application {
 
 //    public static RefWatcher sRefWatcher;
 
-    private AppComponent appComponent;
 
     private static App application;
 
@@ -35,7 +29,6 @@ public class App extends Application {
 //        }
 //        sRefWatcher = LeakCanary.install(this);
 
-        initAppComponent();
         initOkHttp();
     }
 
@@ -46,14 +39,6 @@ public class App extends Application {
                 .isDiskCache(true)
                 .isMemoryCache(true);
         HttpUtils.setConFiguration(configuration);
-    }
-
-    private void initAppComponent() {
-        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-    }
-
-    public AppComponent getAppComponent() {
-        return appComponent;
     }
 
     public static App getApplication() {

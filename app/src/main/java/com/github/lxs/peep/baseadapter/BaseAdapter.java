@@ -17,7 +17,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     protected static final int TYPE_EMPTY = 0;
     protected static final int TYPE_DEFAULT = 1;
-    protected static int emptyLayout = R.layout.default_empty_layout;
+    protected static int emptyLayout = R.layout.layout_loading_status;
     protected List<T> mData;
     protected Context mContext;
     protected boolean mUseAnimation;

@@ -2,13 +2,19 @@ package com.github.lxs.peep.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.github.lxs.peep.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -19,6 +25,7 @@ public abstract class BaseFragment extends Fragment {
     protected Context mContext;
     protected Activity mActivity;
     private Unbinder unbinder;
+    private Toast mToast;
 
 
     @Nullable
@@ -32,16 +39,26 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mContext = getActivity();
+        mActivity = getActivity();
+        initLoadStatusView();
         init();
-
     }
 
     protected void init() {
-        mContext = getActivity();
-        mActivity = getActivity();
         initViews();
         initData();
     }
+
+    protected void initV() {
+        initViews();
+    }
+
+    protected void initD() {
+        initViews();
+    }
+
+    protected void initLoadStatusView(){}
 
     protected abstract View initRootView(LayoutInflater inflater, ViewGroup container);
 
@@ -50,11 +67,18 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void initData();
 
     protected void showToast(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+        showToast(msg, Toast.LENGTH_SHORT);
     }
 
     protected void showLongToast(String msg) {
-        Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        showToast(msg, Toast.LENGTH_LONG);
+    }
+
+    private void showToast(String msg, int duration) {
+        if (mToast != null)
+            mToast.cancel();
+        mToast = Toast.makeText(getActivity(), msg, duration);
+        mToast.show();
     }
 
     @Override

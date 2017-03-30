@@ -61,8 +61,8 @@ public class FaceScoreAdapter extends BaseAdapter {
         Glide.with(mContext)
                 .load(item.getVertical_src())
                 .crossFade(300)
-                .placeholder(R.mipmap.dy_image_loading)
-                .error(R.mipmap.dy_image_error)
+                .placeholder(R.mipmap.dy_img_loading_big)
+                .error(R.mipmap.dy_img_loading_error_big)
                 .into(mHolder.mRoomImg);
         mHolder.mTvOnlineNum.setText(item.getOnline() + "");
         mHolder.mTvName.setText(item.getNickname());

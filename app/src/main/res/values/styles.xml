@@ -46,6 +46,6 @@
         <!-- 提示文案的文字颜色 -->
         <item name="banner_tipTextColor">@android:color/white</item>
         <!-- 加载网络数据时覆盖在BGABanner最上层的占位图 -->
-        <item name="banner_placeholderDrawable">@mipmap/dy_image_loading</item>
+        <item name="banner_placeholderDrawable">@mipmap/dy_img_loading</item>
     </style>
 </resources>

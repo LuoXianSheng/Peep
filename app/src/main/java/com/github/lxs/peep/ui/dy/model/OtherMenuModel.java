@@ -1,5 +1,6 @@
 package com.github.lxs.peep.ui.dy.model;
 
+import com.github.lxs.peep.bean.dy.HomeRecommendHotCate;
 import com.github.lxs.peep.bean.dy.IndexCateList;
 import com.github.lxs.peep.http.ApiManager;
 import com.github.lxs.peep.http.HttpResponse;
@@ -11,29 +12,27 @@ import com.socks.library.KLog;
 
 import java.util.List;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by cl on 2017/3/30.
  */
 
-public class IndexModel {
+public class OtherMenuModel {
 
-    public void loadMenuBaseData(OnLoadCompleteListener<List<IndexCateList>> listener) {
+    public void loadMenuBaseData(String type, OnLoadCompleteListener<List<HomeRecommendHotCate>> listener) {
         HttpUtils.getInstance()
                 .getRetofitClinet()
                 .builder(ApiManager.DyApi.class)
-                .getHomeCateList(ParamsMapUtils.getDefaultParams())
+                .getHomeCate(ParamsMapUtils.getHomeCate(type))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(HttpResponse::getData)
-                .subscribe(new MySubscriber<List<IndexCateList>>() {
+                .subscribe(new MySubscriber<List<HomeRecommendHotCate>>() {
                     @Override
-                    public void onSuccess(List<IndexCateList> indexCateLists) {
-                        listener.onLoadSuccess(indexCateLists);
+                    public void onSuccess(List<HomeRecommendHotCate> homeRecommendHotCates) {
+                        listener.onLoadSuccess(homeRecommendHotCates);
                     }
 
                     @Override
@@ -42,6 +41,5 @@ public class IndexModel {
                         listener.onLoadFailed("失败");
                     }
                 });
-
     }
 }

@@ -27,40 +27,33 @@ import butterknife.ButterKnife;
  * Created by cl on 2017/3/28.
  */
 
-public class IndexAdapter extends BaseAdapter {
+public class OtherMenuAdapter extends BaseAdapter {
 
     private static final int TYPE_1 = 0;//最热
-    private static final int TYPE_2 = 1;//颜值
-    private static final int TYPE_3 = 2;//其它所有
+    private static final int TYPE_2 = 1;//其它所有
 
-    private static final int MAX_TYPE = 3;
+    private static final int MAX_TYPE = 2;
 
     private List<HomeHotColumn> mHotColumns;
 
-    private List<HomeFaceScoreColumn> mFaceScoreColumns;
-
-    private List<HomeRecommendHotCate> mOtherAllColumns;
+    private List<HomeRecommendHotCate> homeCates;
 
     private HotAdapter mHotAdapter;
-    private FaceScoreAdapter mFaceScoreAdapter;
 
     private Context mContext;
 
-    public IndexAdapter(Context context) {
+    public OtherMenuAdapter(Context context, List<HomeRecommendHotCate> homeCates) {
         mContext = context;
-
-        mHotColumns = new ArrayList<>();
-        mHotAdapter = new HotAdapter(mHotColumns, mContext);
-
-        mFaceScoreColumns = new ArrayList<>();
-        mFaceScoreAdapter = new FaceScoreAdapter(mFaceScoreColumns, mContext);
-
-        mOtherAllColumns = new ArrayList<>();
+        this.homeCates = homeCates;
+//        mHotColumns = new ArrayList<>();
+//        mHotAdapter = new HotAdapter(mHotColumns, mContext);
+//
+//        mOtherAllColumns = new ArrayList<>();
     }
 
     @Override
     public int getCount() {
-        return mOtherAllColumns.size() + 2;//加上hot，face
+        return homeCates.size();//加上hot
     }
 
     @Override
@@ -75,13 +68,11 @@ public class IndexAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_1;
-        } else if (position == 1) {
+//        if (position == 0) {
+//            return TYPE_1;
+//        } else {
             return TYPE_2;
-        } else {
-            return TYPE_3;
-        }
+//        }
     }
 
     @Override
@@ -119,12 +110,7 @@ public class IndexAdapter extends BaseAdapter {
                 mHolder.mItemIcon.setImageResource(R.mipmap.icon_hot);
                 break;
             case TYPE_2:
-                mHolder.mRvColumnList.setAdapter(mFaceScoreAdapter);
-                mHolder.mTitle.setText("颜值");
-                mHolder.mItemIcon.setImageResource(R.mipmap.icon_facescore);
-                break;
-            case TYPE_3:
-                HomeRecommendHotCate item = mOtherAllColumns.get(position - 2);
+                HomeRecommendHotCate item = homeCates.get(position);//因为有hot，所以position相对于集合来说会大1
                 AllOtherAdapter allOtherAdapter = new AllOtherAdapter(item.getRoom_list(), mContext);
                 mHolder.mRvColumnList.setAdapter(allOtherAdapter);
                 mHolder.mTitle.setText(item.getTag_name());
@@ -144,17 +130,11 @@ public class IndexAdapter extends BaseAdapter {
         mHotAdapter.refreshListData(mHotColumns);
     }
 
-    public void refreshFaceScoreListData(List<HomeFaceScoreColumn> mFaceScoreColumns) {
-        this.mFaceScoreColumns.clear();
-        this.mFaceScoreColumns.addAll(mFaceScoreColumns);
-        mFaceScoreAdapter.refreshListData(mFaceScoreColumns);
-    }
-
-    public void refreshOtherAllListData(List<HomeRecommendHotCate> mOtherAllColumns) {
-        this.mOtherAllColumns.clear();
-        this.mOtherAllColumns.addAll(mOtherAllColumns);
-        notifyDataSetChanged();
-    }
+//    public void refreshOtherAllListData(List<HomeRecommendHotCate> mOtherAllColumns) {
+//        this.mOtherAllColumns.clear();
+//        this.mOtherAllColumns.addAll(mOtherAllColumns);
+//        notifyDataSetChanged();
+//    }
 
 
     class ViewHolder {

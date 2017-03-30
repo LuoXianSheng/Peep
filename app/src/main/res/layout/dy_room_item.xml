@@ -57,7 +57,7 @@
             android:layout_alignBottom="@+id/tv_name"
             android:layout_alignTop="@+id/tv_name"
             android:layout_marginLeft="3dp"
-            android:src="@mipmap/icon_host_name"/>
+            android:src="@mipmap/icon_host_name_whilt"/>
 
         <TextView
             android:id="@+id/tv_name"
@@ -68,9 +68,9 @@
             android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/img_host"
             android:gravity="center"
-            android:textColor="#fff"
             android:maxLines="1"
             android:text="name"
+            android:textColor="#fff"
             android:textSize="10sp"/>
 
         <TextView
