@@ -35,10 +35,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
             android:layout_toLeftOf="@+id/img_right"
             android:gravity="center"
             android:text="更多"
-            android:textSize="11sp"/>
+            android:textSize="10sp"/>
 
         <ImageView
             android:id="@+id/img_right"
@@ -50,13 +51,6 @@
             android:src="@mipmap/icon_right_arrow_gray"/>
     </com.zhy.autolayout.AutoRelativeLayout>
 
-    <com.github.lxs.peep.widget.MyGridView
-        android:id="@+id/gridView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:numColumns="2"
-        android:scrollbars="none"
-        android:verticalSpacing="0dp"/>
+   <include layout="@layout/include_gridview" />
 
 </com.zhy.autolayout.AutoLinearLayout>

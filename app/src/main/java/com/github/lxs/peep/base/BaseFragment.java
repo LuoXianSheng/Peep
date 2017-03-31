@@ -27,7 +27,6 @@ public abstract class BaseFragment extends Fragment {
     private Unbinder unbinder;
     private Toast mToast;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mContext = getActivity();
         mActivity = getActivity();
-        initLoadStatusView();
         init();
     }
 
@@ -57,8 +55,6 @@ public abstract class BaseFragment extends Fragment {
     protected void initD() {
         initViews();
     }
-
-    protected void initLoadStatusView(){}
 
     protected abstract View initRootView(LayoutInflater inflater, ViewGroup container);
 

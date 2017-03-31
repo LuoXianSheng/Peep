@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
-import com.github.lxs.peep.bean.dy.HomeHotColumn;
+import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;

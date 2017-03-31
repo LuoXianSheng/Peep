@@ -2,14 +2,13 @@ package com.github.lxs.peep.base;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.github.lxs.peep.R;
+import com.socks.library.KLog;
 
 import butterknife.ButterKnife;
 
@@ -20,37 +19,36 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
     protected Handler mHandler = new Handler();
     private Runnable mRunnable;
 
-    private View loadStatusView;
-    private ViewGroup viewGroup;
+    private View loadView;
     private LinearLayout loadingLayout, loadErrorLayout;
 
-    private int delayedTime = 0;
     private boolean isLoadData = false;
+    private AnimationDrawable mAnimationDrawable;
+
+    protected abstract P createPresenter();
+
+
+    protected int delayedTime = 0;
 
     public void setDelayedTime(int delayedTime) {
         this.delayedTime = delayedTime;
     }
 
-    protected abstract P createPresenter();
-
     @Override
     protected void init() {
         mPresenter = createPresenter();
-        if (delayedTime == 0)
-            super.init();
+        initLoadStatusView();
     }
 
-    @Override
     protected void initLoadStatusView() {
-        if (mRootView instanceof LinearLayout) {
-            viewGroup = (LinearLayout) mRootView;
+        loadView = ButterKnife.findById(mRootView, R.id.load_layout);
+        if (loadView == null) {
+            super.init();
+            return;
         }
-        if (viewGroup == null) return;
-        loadStatusView = LayoutInflater.from(mContext).inflate(R.layout.layout_loading_status, null);
-        loadingLayout = ButterKnife.findById(loadStatusView, R.id.loading_layout);
-        loadErrorLayout = ButterKnife.findById(loadStatusView, R.id.load_error_layout);
-        viewGroup.addView(loadStatusView);
-        ButterKnife.findById(loadStatusView, R.id.btn_reset).setOnClickListener(v -> {
+        loadingLayout = ButterKnife.findById(mRootView, R.id.loading_layout);
+        loadErrorLayout = ButterKnife.findById(mRootView, R.id.load_error_layout);
+        ButterKnife.findById(mRootView, R.id.btn_reset).setOnClickListener(v -> {
             hideLoadErrorView();
             showLoadView();
             MvpFragment.super.initD();
@@ -58,29 +56,37 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
     }
 
     protected void showLoadView() {
-        ImageView img = ButterKnife.findById(loadStatusView, R.id.loading_view);
-        AnimationDrawable mAnimationDrawable = (AnimationDrawable) img.getDrawable();
-        mAnimationDrawable.start();
+        if (loadView == null) return;
         loadingLayout.setVisibility(View.VISIBLE);
+        ImageView img = ButterKnife.findById(loadView, R.id.loading_view);
+        mAnimationDrawable = (AnimationDrawable) img.getDrawable();
+        mAnimationDrawable.start();
     }
 
-    protected void hideLoadView() {
+    protected void hideLoadingView() {
+        if (loadView == null) return;
         loadingLayout.setVisibility(View.GONE);
+        mAnimationDrawable.stop();
     }
 
     protected void hideLoadErrorView() {
+        if (loadView == null) return;
         loadErrorLayout.setVisibility(View.GONE);
     }
 
     protected void showLoadErrorView() {
+        if (loadView == null) return;
         loadErrorLayout.setVisibility(View.VISIBLE);
     }
 
-    protected void removeLoadStatusView() {
-        if (loadStatusView == null) return;
-        viewGroup.removeView(loadStatusView);
-        loadStatusView = null;
+    protected void hideLoadView() {
+        if (loadView == null) return;
+        if (loadView.getVisibility() == View.GONE) return;
+        loadView.setVisibility(View.GONE);
+        if (mAnimationDrawable != null && mAnimationDrawable.isRunning())
+            mAnimationDrawable.stop();
     }
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -99,7 +105,7 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
      * 可见
      */
     protected void onVisible() {
-        if (isLoadData || delayedTime == 0) return;
+        if (isLoadData) return;
         showLoadView();
         mRunnable = () -> {
             isLoadData = true;
@@ -112,7 +118,7 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
      * 不可见
      */
     protected void onInvisible() {
-        if (isLoadData || delayedTime == 0) return;
+        if (isLoadData) return;
         mHandler.removeCallbacks(mRunnable);
     }
 

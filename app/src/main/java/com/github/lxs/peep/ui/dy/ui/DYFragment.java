@@ -10,7 +10,13 @@ import android.view.ViewGroup;
 
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.BaseFragment;
+import com.github.lxs.peep.base.MvpFragment;
+import com.github.lxs.peep.bean.dy.live.LiveOtherColumn;
+import com.github.lxs.peep.di.component.DaggerDYComponent;
+import com.github.lxs.peep.di.module.DYModule;
+import com.github.lxs.peep.ui.dy.presenter.TabMenuPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
+import com.github.lxs.peep.ui.dy.view.ITabMenuView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -23,6 +29,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Tr
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -30,16 +39,19 @@ import butterknife.BindView;
  * Created by cl on 2017/3/24.
  */
 
-public class DYFragment extends BaseFragment {
+public class DYFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> implements ITabMenuView<LiveOtherColumn> {
 
     @BindView(R.id.dy_tab)
     MagicIndicator mIndicator;
     @BindView(R.id.dy_viewpager)
     ViewPager mIndexViewpager;
 
+    @Inject
+    TabMenuPresenter mPresenter;
+
     private DYFragmentAdapter mAdapter;
     private ArrayList<Fragment> mFragments;
-    private String[] titles = {"首页", "全部直播", "第一个", "二", "四个多啊"};
+    private String[] titles;
 
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
@@ -47,21 +59,39 @@ public class DYFragment extends BaseFragment {
     }
 
     @Override
-    protected void init() {
-        mFragments = new ArrayList<>();
-        mFragments.add(new IndexFragment());
-        mFragments.add(new ViewPagerFragment());
-        mFragments.add(new OtherFragment());
-        mFragments.add(new OtherFragment());
-        mFragments.add(new OtherFragment());
-        super.init();
+    protected TabMenuPresenter createPresenter() {
+        DaggerDYComponent.builder().dYModule(new DYModule(this)).build().inject(this);
+        return mPresenter;
     }
+
 
     @Override
     protected void initViews() {
-        mIndexViewpager.setOffscreenPageLimit(2);
+
+    }
+
+    @Override
+    protected void initData() {
+        mPresenter.loadTabMenuBase();
+    }
+
+    @Override
+    public void setTabMenuBaseData(List<LiveOtherColumn> menuBaseData) {
+        mFragments = new ArrayList<>();
+        titles = new String[menuBaseData.size() + 2];
+        titles[0] = "首页";
+        mFragments.add(new IndexFragment());
+        titles[1] = "全部直播";
+        mFragments.add(new AllLiveFragment());
+        for (int i = 0; i < menuBaseData.size(); i++) {
+            titles[i + 2] = menuBaseData.get(i).getCate_name();
+            mFragments.add(new AllLiveFragment());
+        }
+
+        mIndexViewpager.setOffscreenPageLimit(5);
         mAdapter = new DYFragmentAdapter(getChildFragmentManager(), mFragments);
         mIndexViewpager.setAdapter(mAdapter);
+
         initIndicator();
     }
 
@@ -100,7 +130,17 @@ public class DYFragment extends BaseFragment {
     }
 
     @Override
-    protected void initData() {
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showError(String error) {
 
     }
 }

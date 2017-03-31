@@ -87,12 +87,12 @@ public class ScrollableHelper {
         throw new IllegalStateException("scrollableView must be a instance of AdapterView|ScrollView|RecyclerView");
     }
 
-//    private static boolean isRecyclerViewTop(RecyclerView recyclerview) {
-//        if (recyclerview != null) {
-//            RecyclerView.LayoutManager layoutManager = recyclerview.getLayoutManager();
+//    private static boolean isRecyclerViewTop(RecyclerView include_recyclerview) {
+//        if (include_recyclerview != null) {
+//            RecyclerView.LayoutManager layoutManager = include_recyclerview.getLayoutManager();
 //            if (layoutManager instanceof LinearLayoutManager) {
 //                int firstVisibleItemPosition = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-//                View childAt = recyclerview.getChildAt(0);
+//                View childAt = include_recyclerview.getChildAt(0);
 //                if (childAt == null || (firstVisibleItemPosition == 0 && childAt.getTop() == 0)) {
 //                    return true;
 //                }

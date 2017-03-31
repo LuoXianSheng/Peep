@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
-import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
-import com.zhy.autolayout.utils.AutoUtils;
+import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 
 import java.util.List;
 
@@ -23,12 +22,12 @@ import butterknife.ButterKnife;
  * Created by cl on 2017/3/28.
  */
 
-public class FaceScoreAdapter extends BaseAdapter {
+public class PubItemAdapter extends BaseAdapter {
 
-    private List<HomeFaceScoreColumn> mList;
+    private List<HomeRecommendHotCate.RoomListEntity> mList;
     private Context mContext;
 
-    public FaceScoreAdapter(List<HomeFaceScoreColumn> list, Context context) {
+    public PubItemAdapter(List<HomeRecommendHotCate.RoomListEntity> list, Context context) {
         mList = list;
         mContext = context;
     }
@@ -52,28 +51,21 @@ public class FaceScoreAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder mHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_room_facescore_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_room_item, parent, false);
             mHolder = new ViewHolder(convertView);
             convertView.setTag(mHolder);
-            AutoUtils.autoSize(convertView);
         } else mHolder = (ViewHolder) convertView.getTag();
-        HomeFaceScoreColumn item = mList.get(position);
+        HomeRecommendHotCate.RoomListEntity item = mList.get(position);
         Glide.with(mContext)
-                .load(item.getVertical_src())
-                .crossFade(300)
-                .placeholder(R.mipmap.dy_img_loading_big)
-                .error(R.mipmap.dy_img_loading_error_big)
+                .load(item.getRoom_src())
+                .crossFade()
+                .placeholder(R.mipmap.dy_img_loading)
+                .error(R.mipmap.dy_img_loading_error)
                 .into(mHolder.mRoomImg);
         mHolder.mTvOnlineNum.setText(item.getOnline() + "");
         mHolder.mTvName.setText(item.getNickname());
-        mHolder.mTvLocate.setText(item.getAnchor_city());
+        mHolder.mTvRoomName.setText(item.getRoom_name());
         return convertView;
-    }
-
-    public void refreshListData(List<HomeFaceScoreColumn> mHotColumns) {
-        mList.clear();
-        mList.addAll(mHotColumns);
-        notifyDataSetChanged();
     }
 
     class ViewHolder {
@@ -83,8 +75,8 @@ public class FaceScoreAdapter extends BaseAdapter {
         TextView mTvOnlineNum;
         @BindView(R.id.tv_name)
         TextView mTvName;
-        @BindView(R.id.tv_locate)
-        TextView mTvLocate;
+        @BindView(R.id.tv_room_name)
+        TextView mTvRoomName;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

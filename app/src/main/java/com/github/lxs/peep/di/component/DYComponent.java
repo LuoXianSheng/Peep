@@ -2,9 +2,11 @@ package com.github.lxs.peep.di.component;
 
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.di.scope.FragmentScope;
+import com.github.lxs.peep.ui.dy.ui.AllLiveFragment;
+import com.github.lxs.peep.ui.dy.ui.DYFragment;
 import com.github.lxs.peep.ui.dy.ui.IndexFragment;
-import com.github.lxs.peep.ui.dy.ui.OtherMenuFragment;
-import com.github.lxs.peep.ui.dy.ui.RecommendFragment;
+import com.github.lxs.peep.ui.dy.ui.IndexOtherMenuFragment;
+import com.github.lxs.peep.ui.dy.ui.IndexRecommendFragment;
 
 import dagger.Component;
 
@@ -16,9 +18,14 @@ import dagger.Component;
 @Component(modules = DYModule.class)
 public interface DYComponent {
 
-    void inject(RecommendFragment recommendFragment);
+    void inject(IndexRecommendFragment indexRecommendFragment);
 
     void inject(IndexFragment indexFragment);
 
-    void inject(OtherMenuFragment otherMenuFragment);
+    void inject(IndexOtherMenuFragment indexOtherMenuFragment);
+
+    void inject(AllLiveFragment allLiveFragment);
+
+    void inject(DYFragment dyFragment);
+
 }

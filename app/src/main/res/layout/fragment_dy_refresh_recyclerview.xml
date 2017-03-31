@@ -18,14 +18,7 @@
         app:isHeightMatchParent="true"
         app:isWidthMatchParent="true">
 
-        <ListView
-            android:id="@+id/dy_listview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#EEEEEE"
-            android:divider="@null"
-            android:dividerHeight="10dp"
-            android:scrollbars="none"/>
+        <include layout="@layout/include_recyclerview"/>
     </com.andview.refreshview.XRefreshView>
 
 </com.zhy.autolayout.AutoLinearLayout>

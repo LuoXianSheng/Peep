@@ -1,14 +1,19 @@
 package com.github.lxs.peep.http;
 
 import com.github.lxs.peep.bean.db.Top250;
-import com.github.lxs.peep.bean.dy.HomeCarousel;
-import com.github.lxs.peep.bean.dy.HomeColumnMoreAllList;
-import com.github.lxs.peep.bean.dy.HomeColumnMoreOtherList;
-import com.github.lxs.peep.bean.dy.HomeColumnMoreTwoCate;
-import com.github.lxs.peep.bean.dy.HomeFaceScoreColumn;
-import com.github.lxs.peep.bean.dy.HomeHotColumn;
-import com.github.lxs.peep.bean.dy.HomeRecommendHotCate;
-import com.github.lxs.peep.bean.dy.IndexCateList;
+import com.github.lxs.peep.bean.dy.index.HomeCarousel;
+import com.github.lxs.peep.bean.dy.index.HomeColumnMoreAllList;
+import com.github.lxs.peep.bean.dy.index.HomeColumnMoreOtherList;
+import com.github.lxs.peep.bean.dy.index.HomeColumnMoreTwoCate;
+import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
+import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
+import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
+import com.github.lxs.peep.bean.dy.index.HomeCateList;
+import com.github.lxs.peep.bean.dy.live.LiveAllList;
+import com.github.lxs.peep.bean.dy.live.LiveOtherColumn;
+import com.github.lxs.peep.bean.dy.live.LiveOtherList;
+import com.github.lxs.peep.bean.dy.live.LiveOtherTwoColumn;
+import com.github.lxs.peep.bean.dy.live.LiveSportsAllList;
 
 import java.util.List;
 import java.util.Map;
@@ -28,17 +33,22 @@ import static com.github.lxs.peep.http.HttpUrl.getHomeColumnMoreOtherList;
 import static com.github.lxs.peep.http.HttpUrl.getHomeFaceScoreColumn;
 import static com.github.lxs.peep.http.HttpUrl.getHomeHotColumn;
 import static com.github.lxs.peep.http.HttpUrl.getHomeRecommendHotCate;
+import static com.github.lxs.peep.http.HttpUrl.getLiveAllList;
+import static com.github.lxs.peep.http.HttpUrl.getLiveOtherColumn;
+import static com.github.lxs.peep.http.HttpUrl.getLiveOtherTwoColumn;
+import static com.github.lxs.peep.http.HttpUrl.getLiveOtherTwoList;
+import static com.github.lxs.peep.http.HttpUrl.getLiveSportsAllList;
 
 public interface ApiManager {
 
-    interface DyApi {
+    interface DyIndexApi {
         /**
          * 首页分类列表
          *
          * @return
          */
         @GET(getHomeCateList)
-        Observable<HttpResponse<List<IndexCateList>>> getHomeCateList(@QueryMap Map<String, String> params);
+        Observable<HttpResponse<List<HomeCateList>>> getHomeCateList(@QueryMap Map<String, String> params);
 
         /**
          * 首页 列表详情页
@@ -104,6 +114,49 @@ public interface ApiManager {
          */
         @GET(getHomeColumnMoreAllList + "{cate_id}")
         Observable<HttpResponse<List<HomeColumnMoreAllList>>> getHomeColumnMoreAllList(@Path("cate_id") String cate_id, @QueryMap Map<String, String> params);
+
+    }
+
+    interface DyLiveApi {
+        /**
+         * 直播其他栏目分类
+         *
+         * @return
+         */
+        @GET(getLiveOtherColumn)
+        Observable<HttpResponse<List<LiveOtherColumn>>> getLiveOtherColumn(@QueryMap Map<String, String> params);
+
+        /**
+         * 全部直播
+         *
+         * @return
+         */
+        @GET(getLiveAllList)
+        Observable<HttpResponse<List<LiveAllList>>> getLiveAllList(@QueryMap Map<String, String> params);
+
+        /**
+         * 直播其他栏目二级分类
+         *
+         * @return
+         */
+        @GET(getLiveOtherTwoColumn)
+        Observable<HttpResponse<List<LiveOtherTwoColumn>>> getLiveOtherTwoColumn(@QueryMap Map<String, String> params);
+
+        /**
+         * 直播其他列表页
+         *
+         * @return
+         */
+        @GET(getLiveOtherTwoList + "{cate_id}")
+        Observable<HttpResponse<List<LiveOtherList>>> getLiveOtherList(@Path("cate_id") String cate_id, @QueryMap Map<String, String> params);
+
+        /**
+         * 体育直播
+         *
+         * @return
+         */
+        @GET(getLiveSportsAllList)
+        Observable<HttpResponse<List<LiveSportsAllList>>> getLiveSportsAllList(@QueryMap Map<String, String> params);
 
     }
 

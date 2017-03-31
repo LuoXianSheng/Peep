@@ -1,9 +1,10 @@
 package com.github.lxs.peep.di.module;
 
 import com.github.lxs.peep.di.scope.FragmentScope;
-import com.github.lxs.peep.ui.dy.view.IIndexView;
-import com.github.lxs.peep.ui.dy.view.IOtherMenuView;
-import com.github.lxs.peep.ui.dy.view.IRecomView;
+import com.github.lxs.peep.ui.dy.view.IAllLiveView;
+import com.github.lxs.peep.ui.dy.view.IIndexOtherMenuView;
+import com.github.lxs.peep.ui.dy.view.IIndexRecomView;
+import com.github.lxs.peep.ui.dy.view.ITabMenuView;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,37 +16,48 @@ import dagger.Provides;
 @Module
 public class DYModule {
 
-    private IRecomView mIRecomView;
-    private IIndexView mIIndexView;
-    private IOtherMenuView iOtherMenuView;
+    private IIndexRecomView mIIndexRecomView;
+    private ITabMenuView mITabMenuView;
+    private IIndexOtherMenuView mIIndexOtherMenuView;
+    private IAllLiveView mIAllLiveView;
 
-    public DYModule(IRecomView mIRecomView) {
-        this.mIRecomView = mIRecomView;
+    public DYModule(IIndexRecomView mIIndexRecomView) {
+        this.mIIndexRecomView = mIIndexRecomView;
     }
 
-    public DYModule(IIndexView mIIndexView) {
-        this.mIIndexView = mIIndexView;
+    public DYModule(ITabMenuView mITabMenuView) {
+        this.mITabMenuView = mITabMenuView;
     }
 
-    public DYModule(IOtherMenuView iOtherMenuView) {
-        this.iOtherMenuView = iOtherMenuView;
+    public DYModule(IIndexOtherMenuView iIndexOtherMenuView) {
+        this.mIIndexOtherMenuView = iIndexOtherMenuView;
     }
 
-    @FragmentScope
-    @Provides
-    public IRecomView providesIRecomView() {
-        return mIRecomView;
-    }
-
-    @FragmentScope
-    @Provides
-    public IIndexView providesIIndexView() {
-        return mIIndexView;
+    public DYModule(IAllLiveView iAllLiveView) {
+        this.mIAllLiveView = iAllLiveView;
     }
 
     @FragmentScope
     @Provides
-    public IOtherMenuView providesIOtherMenuView() {
-        return iOtherMenuView;
+    public IIndexRecomView providesIRecomView() {
+        return mIIndexRecomView;
+    }
+
+    @FragmentScope
+    @Provides
+    public ITabMenuView providesIIndexView() {
+        return mITabMenuView;
+    }
+
+    @FragmentScope
+    @Provides
+    public IIndexOtherMenuView providesIOtherMenuView() {
+        return mIIndexOtherMenuView;
+    }
+
+    @FragmentScope
+    @Provides
+    public IAllLiveView providesIAllLiveView() {
+        return mIAllLiveView;
     }
 }

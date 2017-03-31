@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.MvpFragment;
-import com.github.lxs.peep.bean.dy.IndexCateList;
+import com.github.lxs.peep.bean.dy.index.HomeCateList;
 import com.github.lxs.peep.di.component.DaggerDYComponent;
 import com.github.lxs.peep.di.module.DYModule;
-import com.github.lxs.peep.ui.dy.presenter.IndexPresenter;
+import com.github.lxs.peep.ui.dy.presenter.TabMenuPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
-import com.github.lxs.peep.ui.dy.view.IIndexView;
-import com.socks.library.KLog;
+import com.github.lxs.peep.ui.dy.view.ITabMenuView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -39,15 +38,17 @@ import butterknife.BindView;
  * Created by cl on 2017/3/30.
  */
 
-public class IndexFragment extends MvpFragment<IIndexView, IndexPresenter> implements IIndexView {
+public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> implements ITabMenuView<HomeCateList> {
 
     @BindView(R.id.dy_tab)
     MagicIndicator mIndicator;
     @BindView(R.id.dy_viewpager)
     ViewPager mIndexViewpager;
+    @BindView(R.id.tab_line)
+    View mTabLine;
 
     @Inject
-    IndexPresenter mPresenter;
+    TabMenuPresenter mPresenter;
 
     private DYFragmentAdapter mAdapter;
     private ArrayList<Fragment> mFragments;
@@ -59,7 +60,7 @@ public class IndexFragment extends MvpFragment<IIndexView, IndexPresenter> imple
     }
 
     @Override
-    protected IndexPresenter createPresenter() {
+    protected TabMenuPresenter createPresenter() {
         DaggerDYComponent.builder().dYModule(new DYModule(this)).build().inject(this);
         return mPresenter;
     }
@@ -71,19 +72,18 @@ public class IndexFragment extends MvpFragment<IIndexView, IndexPresenter> imple
 
     @Override
     protected void initData() {
-        mPresenter.loadMenuBaseData();
+        mPresenter.loadIndexMenuBase();
     }
 
     @Override
-    public void setMenuBaseData(List<IndexCateList> indexCateLists) {
+    public void setTabMenuBaseData(List<HomeCateList> homeCateLists) {
         mFragments = new ArrayList<>();
-        titles = new String[indexCateLists.size() + 1];
-        mFragments.add(new RecommendFragment());
+        titles = new String[homeCateLists.size() + 1];
+        mFragments.add(new IndexRecommendFragment());
         titles[0] = "推荐";
-        for (int i = 0; i < indexCateLists.size(); i++) {
-            KLog.e(indexCateLists.get(i).getShow_order());
-            mFragments.add(new OtherMenuFragment(indexCateLists.get(i).getShow_order(), 1500));
-            titles[i + 1] = indexCateLists.get(i).getTitle();
+        for (int i = 0; i < homeCateLists.size(); i++) {
+            mFragments.add(new IndexOtherMenuFragment(homeCateLists.get(i).getIdentification(), 1500));
+            titles[i + 1] = homeCateLists.get(i).getTitle();
         }
 
         mIndexViewpager.setOffscreenPageLimit(titles.length);
@@ -91,6 +91,8 @@ public class IndexFragment extends MvpFragment<IIndexView, IndexPresenter> imple
         mIndexViewpager.setAdapter(mAdapter);
 
         initIndicator();
+
+        mTabLine.setVisibility(View.VISIBLE);
     }
 
     private void initIndicator() {
