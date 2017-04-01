@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.MvpFragment;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
-import com.github.lxs.peep.di.component.DaggerDYComponent;
+import com.github.lxs.peep.di.component.DaggerDYFragmentComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.IndexOtherMenuPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.IndexOtherAdapter;
@@ -93,7 +93,7 @@ public class IndexOtherMenuFragment extends MvpFragment<IIndexOtherMenuView, Ind
         });
 
         mRefreshView.setPinnedTime(1000);
-        mRefreshView.setPullLoadEnable(true);
+        mRefreshView.setPullLoadEnable(false);
         mRefreshView.setPullRefreshEnable(true);
         mRefreshView.setMoveForHorizontal(true);
         mRefreshView.setPinnedContent(true);
@@ -184,7 +184,7 @@ public class IndexOtherMenuFragment extends MvpFragment<IIndexOtherMenuView, Ind
 
     @Override
     protected IndexOtherMenuPresenter createPresenter() {
-        DaggerDYComponent.builder().dYModule(new DYModule(this)).build().inject(this);
+        DaggerDYFragmentComponent.builder().dYModule(new DYModule(this)).build().inject(this);
         return mPresenter;
     }
 }

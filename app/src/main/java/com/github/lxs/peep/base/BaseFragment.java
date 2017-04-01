@@ -15,17 +15,24 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.github.lxs.peep.R;
+import com.github.lxs.peep.utils.FragmentUserVisibleController;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements FragmentUserVisibleController.UserVisibleCallback {
 
     protected View mRootView;
     protected Context mContext;
     protected Activity mActivity;
     private Unbinder unbinder;
     private Toast mToast;
+
+    private FragmentUserVisibleController userVisibleController;
+
+    public BaseFragment() {
+        userVisibleController = new FragmentUserVisibleController(this, this);
+    }
 
     @Nullable
     @Override
@@ -53,7 +60,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void initD() {
-        initViews();
+        initData();
     }
 
     protected abstract View initRootView(LayoutInflater inflater, ViewGroup container);
@@ -80,7 +87,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+
     }
 
     @Override
@@ -88,5 +95,55 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroy();
 //        RefWatcher refWatcher = App.sRefWatcher;
 //        refWatcher.watch(this);
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        userVisibleController.activityCreated();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        userVisibleController.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        userVisibleController.pause();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        userVisibleController.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public boolean isWaitingShowToUser() {
+        return userVisibleController.isWaitingShowToUser();
+    }
+
+    @Override
+    public void setWaitingShowToUser(boolean waitingShowToUser) {
+        userVisibleController.setWaitingShowToUser(waitingShowToUser);
+    }
+
+    @Override
+    public boolean isVisibleToUser() {
+        return userVisibleController.isVisibleToUser();
+    }
+
+    @Override
+    public void callSuperSetUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public void onVisibleToUserChanged(boolean isVisibleToUser, boolean invokeInResumeOrPause) {
+
     }
 }

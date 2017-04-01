@@ -48,4 +48,9 @@
         <!-- 加载网络数据时覆盖在BGABanner最上层的占位图 -->
         <item name="banner_placeholderDrawable">@mipmap/dy_img_loading</item>
     </style>
+
+    <style name="sharePopupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/pop_bottom_out</item>
+    </style>
 </resources>

@@ -13,11 +13,11 @@ public abstract class MvpActivity<V extends BaseView, P extends BasePresenter<V>
         super.init();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.onDestroy();
-        }
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (mPresenter != null) {
+//            mPresenter.onDestroy();
+//        }
+//    }
 }

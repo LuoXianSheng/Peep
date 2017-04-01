@@ -51,6 +51,14 @@
             android:src="@mipmap/icon_right_arrow_gray"/>
     </com.zhy.autolayout.AutoRelativeLayout>
 
-   <include layout="@layout/include_gridview" />
+    <com.github.lxs.peep.widget.MyGridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="2"
+        android:scrollbars="none"
+        android:verticalSpacing="0dp"/>
 
 </com.zhy.autolayout.AutoLinearLayout>

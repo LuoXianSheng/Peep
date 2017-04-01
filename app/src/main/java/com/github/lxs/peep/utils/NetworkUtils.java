@@ -50,6 +50,28 @@ public class NetworkUtils {
 
     }
 
+    public static boolean isWifiConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (mInfo != null) {
+                return mInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
+    public static boolean isMobileConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mInfo = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (mInfo != null) {
+                return mInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
     /**
      * 打开网络设置界面
      */

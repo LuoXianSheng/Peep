@@ -51,7 +51,7 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
         ButterKnife.findById(mRootView, R.id.btn_reset).setOnClickListener(v -> {
             hideLoadErrorView();
             showLoadView();
-            MvpFragment.super.initD();
+            mHandler.postDelayed(MvpFragment.super::initD, 500);
         });
     }
 

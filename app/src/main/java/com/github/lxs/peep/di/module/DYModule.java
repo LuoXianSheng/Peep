@@ -1,9 +1,11 @@
 package com.github.lxs.peep.di.module;
 
+import com.github.lxs.peep.di.scope.ActivityScope;
 import com.github.lxs.peep.di.scope.FragmentScope;
 import com.github.lxs.peep.ui.dy.view.IAllLiveView;
 import com.github.lxs.peep.ui.dy.view.IIndexOtherMenuView;
 import com.github.lxs.peep.ui.dy.view.IIndexRecomView;
+import com.github.lxs.peep.ui.dy.view.ILivePlayView;
 import com.github.lxs.peep.ui.dy.view.ITabMenuView;
 
 import dagger.Module;
@@ -20,6 +22,7 @@ public class DYModule {
     private ITabMenuView mITabMenuView;
     private IIndexOtherMenuView mIIndexOtherMenuView;
     private IAllLiveView mIAllLiveView;
+    private ILivePlayView mILivePlayView;
 
     public DYModule(IIndexRecomView mIIndexRecomView) {
         this.mIIndexRecomView = mIIndexRecomView;
@@ -35,6 +38,10 @@ public class DYModule {
 
     public DYModule(IAllLiveView iAllLiveView) {
         this.mIAllLiveView = iAllLiveView;
+    }
+
+    public DYModule(ILivePlayView ILivePlayView) {
+        mILivePlayView = ILivePlayView;
     }
 
     @FragmentScope
@@ -59,5 +66,11 @@ public class DYModule {
     @Provides
     public IAllLiveView providesIAllLiveView() {
         return mIAllLiveView;
+    }
+
+    @ActivityScope
+    @Provides
+    public ILivePlayView providesILivePlayView() {
+        return mILivePlayView;
     }
 }

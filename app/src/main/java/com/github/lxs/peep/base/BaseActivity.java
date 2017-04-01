@@ -1,5 +1,6 @@
 package com.github.lxs.peep.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import butterknife.Unbinder;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected Context mContext;
+    protected Activity mActivity;
     private Unbinder mUnbinder;
 
     @Override
@@ -19,6 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(setLayoutRes());
         mUnbinder = ButterKnife.bind(this);
         mContext = this;
+        mActivity = this;
         init();
     }
 

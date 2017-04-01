@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.autolayout.AutoRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="horizontal"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/dialog_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textSize="16sp"
+        android:text="非Wi-fi环境下，观看直播会消耗较多流量！"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/dialog_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/dialog_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:text="继续播放"
+        android:textColor="#000" />
+    
+    <TextView
+        android:id="@+id/dialog_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/dialog_play"
+        android:layout_below="@id/dialog_content"
+        android:layout_toLeftOf="@id/dialog_play"
+        android:text="停止播放"
+        android:textColor="#000" />
+
+</com.zhy.autolayout.AutoRelativeLayout>

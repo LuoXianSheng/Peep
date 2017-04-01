@@ -10,7 +10,7 @@ public class HttpUrl {
     public static String baseUrl="http://capi.douyucdn.cn";
 
     //     OldBase地址
-    public  static String oldBaseUrl="http://coapi.douyucdn.cn";
+    public  static String oldBaseUrl="http://coapi.douyucdn.cn/";
 
 
     /**

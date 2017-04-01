@@ -11,7 +11,9 @@ import com.socks.library.KLog;
 
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by cl on 2017/3/31.
@@ -24,7 +26,9 @@ public class AllLiveModel {
                 .getRetofitClinet()
                 .builder(ApiManager.DyLiveApi.class)
                 .getLiveAllList(ParamsMapUtils.getHomeFaceScoreColumn(start, limit))
+                .subscribeOn(Schedulers.io())
                 .map(HttpResponse::getData)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MySubscriber<List<LiveAllList>>() {
                     @Override
                     public void onSuccess(List<LiveAllList> liveAllLists) {

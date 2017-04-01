@@ -14,12 +14,13 @@ import com.github.lxs.peep.base.MvpFragment;
 import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
-import com.github.lxs.peep.di.component.DaggerDYComponent;
+import com.github.lxs.peep.di.component.DaggerDYFragmentComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.IndexRecomPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.IndexRecommendAdapter;
 import com.github.lxs.peep.ui.dy.view.IIndexRecomView;
 import com.github.lxs.peep.widget.refresh.SmileyHeaderView;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -35,16 +36,24 @@ import cn.bingoogolapple.bgabanner.BGABanner;
 
 public class IndexRecommendFragment extends MvpFragment<IIndexRecomView, IndexRecomPresenter> implements IIndexRecomView {
 
-    @BindView(R.id.refreshView)
-    XRefreshView mRefreshView;
+
     @BindView(R.id.dy_listview)
     ListView mListview;
+    @BindView(R.id.refreshView)
+    XRefreshView mRefreshView;
 
     private IndexRecommendAdapter mAdapter;
     private BGABanner mBGABanner;
 
     @Inject
     IndexRecomPresenter mPresenter;
+
+    public IndexRecommendFragment() {
+    }
+
+    public IndexRecommendFragment(int delayedTime) {
+        super.setDelayedTime(delayedTime);
+    }
 
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
@@ -120,7 +129,7 @@ public class IndexRecommendFragment extends MvpFragment<IIndexRecomView, IndexRe
 
     @Override
     protected IndexRecomPresenter createPresenter() {
-        DaggerDYComponent.builder().dYModule(new DYModule(this)).build().inject(this);
+        DaggerDYFragmentComponent.builder().dYModule(new DYModule(this)).build().inject(this);
         return mPresenter;
     }
 

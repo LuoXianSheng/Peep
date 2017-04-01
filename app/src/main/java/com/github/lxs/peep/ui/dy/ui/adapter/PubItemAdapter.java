@@ -1,6 +1,7 @@
 package com.github.lxs.peep.ui.dy.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
+import com.github.lxs.peep.bean.dy.live.LiveAllList;
+import com.github.lxs.peep.ui.dy.ui.LivePlayActivity;
 
 import java.util.List;
 
@@ -22,12 +25,12 @@ import butterknife.ButterKnife;
  * Created by cl on 2017/3/28.
  */
 
-public class PubItemAdapter extends BaseAdapter {
+public class PubItemAdapter<T> extends BaseAdapter {
 
-    private List<HomeRecommendHotCate.RoomListEntity> mList;
+    private List<T> mList;
     private Context mContext;
 
-    public PubItemAdapter(List<HomeRecommendHotCate.RoomListEntity> list, Context context) {
+    public PubItemAdapter(List<T> list, Context context) {
         mList = list;
         mContext = context;
     }
@@ -39,7 +42,7 @@ public class PubItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mList.get(position);
     }
 
     @Override
@@ -55,17 +58,44 @@ public class PubItemAdapter extends BaseAdapter {
             mHolder = new ViewHolder(convertView);
             convertView.setTag(mHolder);
         } else mHolder = (ViewHolder) convertView.getTag();
-        HomeRecommendHotCate.RoomListEntity item = mList.get(position);
+        String imgUrl = "";
+        String onLineNum = "0";
+        String nickName = "";
+        String roomName = "";
+        if (mList.get(position) instanceof HomeRecommendHotCate.RoomListEntity) {
+            HomeRecommendHotCate.RoomListEntity item = (HomeRecommendHotCate.RoomListEntity) mList.get(position);
+            imgUrl = item.getRoom_src();
+            onLineNum = item.getOnline() + "";
+            nickName = item.getNickname();
+            roomName = item.getRoom_name();
+        } else if (mList.get(position) instanceof LiveAllList) {
+            LiveAllList item = (LiveAllList) mList.get(position);
+            imgUrl = item.getRoom_src();
+            onLineNum = item.getOnline() + "";
+            nickName = item.getNickname();
+            roomName = item.getRoom_name();
+        }
         Glide.with(mContext)
-                .load(item.getRoom_src())
+                .load(imgUrl)
                 .crossFade()
                 .placeholder(R.mipmap.dy_img_loading)
                 .error(R.mipmap.dy_img_loading_error)
                 .into(mHolder.mRoomImg);
-        mHolder.mTvOnlineNum.setText(item.getOnline() + "");
-        mHolder.mTvName.setText(item.getNickname());
-        mHolder.mTvRoomName.setText(item.getRoom_name());
+        mHolder.mTvOnlineNum.setText(onLineNum);
+        mHolder.mTvName.setText(nickName);
+        mHolder.mTvRoomName.setText(roomName);
         return convertView;
+    }
+
+    public void refreshData(List<T> list) {
+        this.mList.clear();
+        this.mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void loadMore(List<T> list) {
+        this.mList.addAll(list);
+        notifyDataSetChanged();
     }
 
     class ViewHolder {

@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.MvpFragment;
 import com.github.lxs.peep.bean.dy.index.HomeCateList;
-import com.github.lxs.peep.di.component.DaggerDYComponent;
+import com.github.lxs.peep.di.component.DaggerDYFragmentComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.TabMenuPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
 import com.github.lxs.peep.ui.dy.view.ITabMenuView;
+import com.socks.library.KLog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -61,7 +62,7 @@ public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> i
 
     @Override
     protected TabMenuPresenter createPresenter() {
-        DaggerDYComponent.builder().dYModule(new DYModule(this)).build().inject(this);
+        DaggerDYFragmentComponent.builder().dYModule(new DYModule(this)).build().inject(this);
         return mPresenter;
     }
 
@@ -79,7 +80,7 @@ public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> i
     public void setTabMenuBaseData(List<HomeCateList> homeCateLists) {
         mFragments = new ArrayList<>();
         titles = new String[homeCateLists.size() + 1];
-        mFragments.add(new IndexRecommendFragment());
+        mFragments.add(new IndexRecommendFragment(500));
         titles[0] = "推荐";
         for (int i = 0; i < homeCateLists.size(); i++) {
             mFragments.add(new IndexOtherMenuFragment(homeCateLists.get(i).getIdentification(), 1500));
@@ -128,10 +129,6 @@ public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> i
         ViewPagerHelper.bind(mIndicator, mIndexViewpager);
     }
 
-    @Override
-    public void showLoadView() {
-
-    }
 
     @Override
     public void showLoading() {
@@ -147,5 +144,4 @@ public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> i
     public void showError(String error) {
 
     }
-
 }

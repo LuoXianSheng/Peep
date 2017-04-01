@@ -17,8 +17,6 @@
 package com.github.lxs.peep.utils;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 public class DensityUtils {

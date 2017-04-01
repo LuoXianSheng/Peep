@@ -24,6 +24,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.dy.ui.LivePlayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+
         <meta-data
             android:name="design_width"
             android:value="1080"/>

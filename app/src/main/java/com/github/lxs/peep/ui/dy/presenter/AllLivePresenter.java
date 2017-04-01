@@ -5,6 +5,7 @@ import com.github.lxs.peep.bean.dy.live.LiveAllList;
 import com.github.lxs.peep.listener.OnLoadCompleteListener;
 import com.github.lxs.peep.ui.dy.model.AllLiveModel;
 import com.github.lxs.peep.ui.dy.view.IAllLiveView;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -22,15 +23,17 @@ public class AllLivePresenter extends BasePresenter<IAllLiveView> {
     @Inject
     public AllLivePresenter(IAllLiveView iAllLiveView) {
         super(iAllLiveView);
+        this.mIAllLiveView = iAllLiveView;
         mAllLiveModel = new AllLiveModel();
     }
 
-    public void loadAllLiveData(int start, int limit) {
+    public void loadAllLiveData(int start, int limit, boolean isLoadMore) {
         mAllLiveModel.loadAllLive(start, limit, new OnLoadCompleteListener<List<LiveAllList>>() {
             @Override
             public void onLoadSuccess(List<LiveAllList> liveAllLists) {
                 mView.hideLoading();
-                mIAllLiveView.setLiveData(liveAllLists);
+                if (isLoadMore) mIAllLiveView.loadMore(liveAllLists);
+                else mIAllLiveView.setLiveData(liveAllLists);
             }
 
             @Override

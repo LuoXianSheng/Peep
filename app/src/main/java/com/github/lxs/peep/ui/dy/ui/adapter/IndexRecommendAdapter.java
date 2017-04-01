@@ -1,9 +1,11 @@
 package com.github.lxs.peep.ui.dy.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 import com.github.lxs.peep.image.GlideTransform;
+import com.github.lxs.peep.ui.dy.ui.LivePlayActivity;
 import com.socks.library.KLog;
 import com.zhy.autolayout.utils.AutoUtils;
 
@@ -126,7 +129,7 @@ public class IndexRecommendAdapter extends BaseAdapter {
                 break;
             case TYPE_3:
                 HomeRecommendHotCate item = mOtherAllColumns.get(position - 2);
-                PubItemAdapter pubItemAdapter = new PubItemAdapter(item.getRoom_list(), mContext);
+                PubItemAdapter<HomeRecommendHotCate.RoomListEntity> pubItemAdapter = new PubItemAdapter<>(item.getRoom_list(), mContext);
                 mHolder.mRvColumnList.setAdapter(pubItemAdapter);
                 mHolder.mTitle.setText(item.getTag_name());
                 Glide.with(mContext)
@@ -134,7 +137,6 @@ public class IndexRecommendAdapter extends BaseAdapter {
                         .dontAnimate()
                         .transform(new GlideTransform(mContext, GlideTransform.CIRCLE))
                         .into(mHolder.mItemIcon);
-                KLog.e("推荐页" + item.getIcon_url());
                 break;
         }
         return convertView;
@@ -169,6 +171,13 @@ public class IndexRecommendAdapter extends BaseAdapter {
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
+
+            mRvColumnList.setOnItemClickListener((parent, view1, position, id) -> {
+                Intent intent = new Intent(mContext, LivePlayActivity.class);
+                intent.putExtra("roomName", mHotColumns.get(position).getRoom_name());
+                intent.putExtra("roomId", mHotColumns.get(position).getRoom_id());
+                mContext.startActivity(intent);
+            });
         }
     }
 }

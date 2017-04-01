@@ -1,6 +1,7 @@
 package com.github.lxs.peep.http;
 
 import com.github.lxs.peep.bean.db.Top250;
+import com.github.lxs.peep.bean.dy.OldLiveVideoInfo;
 import com.github.lxs.peep.bean.dy.index.HomeCarousel;
 import com.github.lxs.peep.bean.dy.index.HomeColumnMoreAllList;
 import com.github.lxs.peep.bean.dy.index.HomeColumnMoreOtherList;
@@ -158,6 +159,9 @@ public interface ApiManager {
         @GET(getLiveSportsAllList)
         Observable<HttpResponse<List<LiveSportsAllList>>> getLiveSportsAllList(@QueryMap Map<String, String> params);
 
+
+        @GET("lapi/live/thirdPart/getPlay/{roomId}")
+        Observable<HttpResponse<OldLiveVideoInfo>> getLiveInfo(@Path("roomId") String cate_id, @QueryMap Map<String, String> params);
     }
 
     @GET("top250")

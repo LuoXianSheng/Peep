@@ -9,13 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.lxs.peep.R;
-import com.github.lxs.peep.base.BaseFragment;
 import com.github.lxs.peep.base.MvpFragment;
 import com.github.lxs.peep.bean.dy.live.LiveOtherColumn;
-import com.github.lxs.peep.di.component.DaggerDYComponent;
+import com.github.lxs.peep.di.component.DaggerDYFragmentComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.TabMenuPresenter;
-import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
+import com.github.lxs.peep.ui.dy.ui.adapter.TabPagerAdapter;
 import com.github.lxs.peep.ui.dy.view.ITabMenuView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -49,8 +48,6 @@ public class DYFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> impl
     @Inject
     TabMenuPresenter mPresenter;
 
-    private DYFragmentAdapter mAdapter;
-    private ArrayList<Fragment> mFragments;
     private String[] titles;
 
     @Override
@@ -60,7 +57,7 @@ public class DYFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> impl
 
     @Override
     protected TabMenuPresenter createPresenter() {
-        DaggerDYComponent.builder().dYModule(new DYModule(this)).build().inject(this);
+        DaggerDYFragmentComponent.builder().dYModule(new DYModule(this)).build().inject(this);
         return mPresenter;
     }
 
@@ -77,20 +74,20 @@ public class DYFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> impl
 
     @Override
     public void setTabMenuBaseData(List<LiveOtherColumn> menuBaseData) {
-        mFragments = new ArrayList<>();
+        ArrayList<Fragment> fragments = new ArrayList<>();
         titles = new String[menuBaseData.size() + 2];
         titles[0] = "首页";
-        mFragments.add(new IndexFragment());
+        fragments.add(new IndexFragment());
         titles[1] = "全部直播";
-        mFragments.add(new AllLiveFragment());
+        fragments.add(new AllLiveFragment(1500));
         for (int i = 0; i < menuBaseData.size(); i++) {
             titles[i + 2] = menuBaseData.get(i).getCate_name();
-            mFragments.add(new AllLiveFragment());
+            fragments.add(new OtherFragment());
         }
 
-        mIndexViewpager.setOffscreenPageLimit(5);
-        mAdapter = new DYFragmentAdapter(getChildFragmentManager(), mFragments);
-        mIndexViewpager.setAdapter(mAdapter);
+//        mIndexViewpager.setOffscreenPageLimit(titles.length);
+        TabPagerAdapter adapter = new TabPagerAdapter(getChildFragmentManager(), fragments);
+        mIndexViewpager.setAdapter(adapter);
 
         initIndicator();
     }
