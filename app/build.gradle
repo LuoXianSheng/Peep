@@ -24,7 +24,7 @@ android {
                 ||task.name.contains("UnitTest")
                 ||task.name.contains("AndroidTest")//用不到NDK和JNI的也关闭掉
                 || task.name.contains("Ndk")
-                || task.name.contains("Jni")
+//                || task.name.contains("Jni")
         ) {
             task.enabled = false
         }
@@ -50,7 +50,7 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['jniLibs']
+            jniLibs.srcDirs = ['libs']
         }
     }
 }
@@ -111,6 +111,8 @@ dependencies {
     //底部导航
     compile 'com.ashokvarma.android:bottom-navigation-bar:1.4.1'
 
+    //播放器
     compile files('libs/pldroid-player-1.5.0.jar')
-
+    //弹幕
+    compile 'com.github.ctiao:DanmakuFlameMaster:0.7.3'
 }

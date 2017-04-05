@@ -2,7 +2,8 @@ package com.github.lxs.peep.di.component;
 
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.di.scope.ActivityScope;
-import com.github.lxs.peep.ui.dy.ui.LivePlayActivity;
+import com.github.lxs.peep.ui.dy.ui.PcLivePlayActivity;
+import com.github.lxs.peep.ui.dy.ui.PhoneLivePlayActivity;
 
 import dagger.Component;
 
@@ -14,5 +15,7 @@ import dagger.Component;
 @Component(modules = DYModule.class)
 public interface DYActivityComponent {
 
-    void inject(LivePlayActivity livePlayActivity);
+    void inject(PcLivePlayActivity pcLivePlayActivity);
+
+    void inject(PhoneLivePlayActivity phoneLivePlayActivity);
 }

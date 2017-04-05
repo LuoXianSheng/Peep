@@ -1,11 +1,9 @@
 package com.github.lxs.peep.ui.dy.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -17,8 +15,6 @@ import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 import com.github.lxs.peep.image.GlideTransform;
-import com.github.lxs.peep.ui.dy.ui.LivePlayActivity;
-import com.socks.library.KLog;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.ArrayList;
@@ -171,13 +167,6 @@ public class IndexRecommendAdapter extends BaseAdapter {
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
-
-            mRvColumnList.setOnItemClickListener((parent, view1, position, id) -> {
-                Intent intent = new Intent(mContext, LivePlayActivity.class);
-                intent.putExtra("roomName", mHotColumns.get(position).getRoom_name());
-                intent.putExtra("roomId", mHotColumns.get(position).getRoom_id());
-                mContext.startActivity(intent);
-            });
         }
     }
 }

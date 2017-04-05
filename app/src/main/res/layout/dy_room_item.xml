@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/cardView"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
@@ -21,6 +22,13 @@
             android:layout_height="100dp"
             android:scaleType="fitXY"
             android:src="@mipmap/dy_img_loading"/>
+
+        <ImageView
+            android:id="@+id/mobile_live"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/icon_mobile_live"
+            android:layout_height="wrap_content"/>
 
         <com.zhy.autolayout.AutoLinearLayout
             android:layout_width="wrap_content"

@@ -1,6 +1,5 @@
 package com.github.lxs.peep.ui.dy.ui;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
@@ -9,32 +8,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,41 +34,30 @@ import android.widget.Toast;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.MvpActivity;
 import com.github.lxs.peep.bean.dy.OldLiveVideoInfo;
+import com.github.lxs.peep.danmu.utils.DanmuProcess;
 import com.github.lxs.peep.di.component.DaggerDYActivityComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.LivePlayPresenter;
-import com.github.lxs.peep.ui.dy.ui.adapter.LiveDetailPagerAdapter;
 import com.github.lxs.peep.ui.dy.view.ILivePlayView;
-import com.github.lxs.peep.utils.DensityUtils;
 import com.github.lxs.peep.utils.DialogUtils;
 import com.github.lxs.peep.utils.NetworkUtils;
+import com.github.lxs.peep.utils.StatusBarUtil;
 import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
 import com.pili.pldroid.player.widget.PLVideoView;
-
-import net.lucode.hackware.magicindicator.MagicIndicator;
-import net.lucode.hackware.magicindicator.ViewPagerHelper;
-import net.lucode.hackware.magicindicator.buildins.UIUtil;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.WrapPagerIndicator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.socks.library.KLog;
+import com.zhy.autolayout.AutoRelativeLayout;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import master.flame.danmaku.controller.IDanmakuView;
 
-public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresenter> implements ILivePlayView, OnClickListener {
+public class PhoneLivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresenter> implements ILivePlayView {
 
-    private static final String TAG = "包房直播";
+    private static final String TAG = "Peep";
 
     /**
      * 控制器常量
@@ -110,26 +91,19 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
     ImageView mOperationBg;// 提示图片
     @BindView(R.id.operation_tv)
     TextView mOperationTv;// 提示文字
-    // @Bind(R.id.coverView)
-    // ImageView coverView;
     @BindView(R.id.loadingView)
     View loadingView;
     @BindView(R.id.tv_buffspeed)
     TextView tvSpeed;
     @BindView(R.id.layout)
     LinearLayout layout;
-    @BindView(R.id.img_share)
-    ImageView btnShare;
-    @BindView(R.id.live_detail_indicator)
-    MagicIndicator mIndicator;
-    @BindView(R.id.live_detail_viewpager)
-    ViewPager mViewPager;
+    @BindView(R.id.danmaku)
+    IDanmakuView mDanmakuView;
+    @BindView(R.id.topLayout)
+    AutoRelativeLayout mTopLayout;
+    @BindView(R.id.bottomLayout)
+    AutoRelativeLayout mBottomLayout;
 
-
-    private PopupWindow mPopup;// 分享的popwindow
-    private View mPopupView;
-
-    private TextView btnShareWchat, btnShareQuan;
     private AudioManager mAudioManager;
 
     // 最大声音
@@ -145,7 +119,6 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
     private boolean isGestureDetector = false;// 是否已经开始手势操作了
     private boolean isShowOperation = false;// 亮度、音量图标是否显示
     private boolean isShowController = false;
-    private boolean isOpenInput;// 是否打开了软键盘
     private long lastTipsTime = 0;// 提示的最后时间
     private boolean isFlowPermission = false;// 播放流量许可（手机网络）
     private boolean isWifi;
@@ -158,11 +131,14 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
 
     private Animation topShowAnimo, bottomShowAnimo, topHideAnimo, bottomHideAnimo;
 
-    private RelativeLayout topLayout, bottomLayout;
     private GestureDetector mGestureDetector;
 
     private boolean isReconnect = false;// 是否正在重连中
     private boolean isStopReconnet = false;// 是否停止重连
+
+    private String liveUrl;
+    private String roomId;
+    private DanmuProcess mDanmuProcess;
 
     private BroadcastReceiver mReceiver;
 
@@ -225,9 +201,11 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
             }
         }
     };
-    private String liveUrl;
 
     private void initPlayer(String liveUrl) {
+
+        KLog.e(liveUrl);
+
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mMaxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
@@ -236,20 +214,21 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
 
         // mVideoPath = Environment.getExternalStorageDirectory() + "/2.mp4";
         // mVideoPath = Environment.getExternalStorageDirectory() + "/aa.mov";
-        mVideoPath = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
+//        mVideoPath = "rtmp://live.hkstv.hk.lxdns.com/live/hks";
         // mVideoPath = "http://oss.hzlm.com.cn/mp4/D201307005.mp4";
 
-//        mVideoPath = liveUrl;
+        mVideoPath = liveUrl;
         setOptions(AVOptions.MEDIA_CODEC_AUTO);
 
+        mVideoView.setDisplayAspectRatio(PLVideoView.ASPECT_RATIO_PAVED_PARENT);
         // Set some listeners
         mVideoView.setOnInfoListener(mOnInfoListener);
         // mVideoView.setOnVideoSizeChangedListener(mOnVideoSizeChangedListener);
-        mVideoView.setOnBufferingUpdateListener(mOnBufferingUpdateListener);// 直播流无效
-        mVideoView.setOnCompletionListener(mOnCompletionListener);
+//        mVideoView.setOnBufferingUpdateListener(mOnBufferingUpdateListener);// 直播流无效
+//        mVideoView.setOnCompletionListener(mOnCompletionListener);
         // mVideoView.setOnSeekCompleteListener(mOnSeekCompleteListener);
         mVideoView.setOnErrorListener(mOnErrorListener);
-        mVideoView.setOnPreparedListener(mOnPreparedListener);
+//        mVideoView.setOnPreparedListener(mOnPreparedListener);
         mVideoView.setVideoPath(mVideoPath);
 
         // You can also use a custom `MediaController` widget
@@ -257,25 +236,47 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         // mVideoView.setMediaController(mMediaController);
 
         mGestureDetector = new GestureDetector(this, new MyGestureListener());
-        videoLayout.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.e("mGestureDetector", "mGestureDetector");
-                mfirstFragment.clearFocus();
-                if (mGestureDetector.onTouchEvent(event)) {
-                    return true;
-                }
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN:
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        endGesture();
-                        break;
-                }
-                return false;
+        videoLayout.setOnTouchListener((v, event) -> {
+            if (mGestureDetector.onTouchEvent(event)) {
+                return true;
             }
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+                    break;
+                case MotionEvent.ACTION_UP:
+                    endGesture();
+                    break;
+            }
+            return false;
         });
+
+        isFirstInitVideo = false;
+        mLodingDialog.dismiss();
+        showControllerView();
+
+//        loadingView.setVisibility(View.VISIBLE);
+//        btnPlay.setImageResource(R.mipmap.icon_live_pause);
+//        mVideoView.start();
+
+        checkNet();
+        if (isWifi) {
+            loadingView.setVisibility(View.VISIBLE);
+            btnPlay.setImageResource(R.mipmap.icon_live_pause);
+            mVideoView.start();
+        } else {
+            if (isMoble) {
+                if (isFlowPermission) {
+                    loadingView.setVisibility(View.VISIBLE);
+                    btnPlay.setImageResource(R.mipmap.icon_live_pause);
+                    mVideoView.start();
+                } else {
+                    mVideoView.stopPlayback();
+                    mPermissionDialog.show();
+                }
+            } else {
+                Toast.makeText(mActivity, "请检查您的网络！", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
@@ -305,63 +306,25 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
     private void videoPlay() {
         if (mVideoView.isPlaying()) {
             mVideoView.pause();
+            if (mDanmakuView != null)
+                mDanmakuView.pause();
             btnPlay.setImageResource(R.mipmap.icon_live_play);
         } else {
             mVideoView.start();
             btnPlay.setImageResource(R.mipmap.icon_live_pause);
             loadingView.setVisibility(View.GONE);
-        }
-    }
 
-    @OnClick(R.id.top_back)
-    public void backClick() {
-        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            atyPortrait();
-        } else {
-            if (mfirstFragment.getIsOpenImput()) {
-                mfirstFragment.clearFocus();
+            if (mDanmakuView != null && mDanmuProcess != null) {
+                mDanmakuView.start();
+                mDanmuProcess.start();
             }
-            finish();
         }
-    }
-
-    @OnClick(R.id.full_screen)
-    public void fullClick() {
-        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            atyPortrait();
-        } else {
-            atyLandscape();
-        }
-    }
-
-    @OnClick(R.id.img_share)
-    public void btnShareClick() {
-        openShareWindow();
     }
 
     /**
      * 所有按钮点击事件---------结束
      */
 
-    private void openShareWindow() {
-        mPopup = new PopupWindow(mPopupView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        mPopup.setOutsideTouchable(true);
-        // mPopup.setTouchable(true);
-        mPopup.setFocusable(true);
-        mPopup.setAnimationStyle(R.style.sharePopupAnimation);
-        ColorDrawable dw = new ColorDrawable(Color.parseColor("#A3A3A3"));
-        mPopup.setBackgroundDrawable(dw);
-        mPopup.showAtLocation(layout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-        mPopup.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams params = getWindow().getAttributes();
-                params.alpha = 1f;
-                getWindow().setAttributes(params);
-            }
-        });
-        mHandler.sendEmptyMessageDelayed(ANIMO_DELAYED, 300);
-    }
 
     /**
      * 发送消息到handle
@@ -386,17 +349,15 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         removeControllerMsg();
         isShowController = true;
 
-        topLayout.setVisibility(View.VISIBLE);
-        topLayout.startAnimation(topShowAnimo);
+        mTopLayout.setVisibility(View.VISIBLE);
+        mTopLayout.startAnimation(topShowAnimo);
 
-        bottomLayout.setVisibility(View.VISIBLE);
-        bottomLayout.startAnimation(bottomShowAnimo);
+        mBottomLayout.setVisibility(View.VISIBLE);
+        mBottomLayout.startAnimation(bottomShowAnimo);
 
         sendEmptyMessageDelayed(HIDE_CONTROLLER, CONTROLLER_HIDE_DELAYED);
-        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            // sendEmptyMessageDelayed(SHOW_STATUS, STATUS_SHOW_DELAYED);
-            // sendEmptyMessageDelayed(HIDE_STATUS, STATUS_HIDE_DELAYED);
-        }
+        sendEmptyMessageDelayed(SHOW_STATUS, STATUS_SHOW_DELAYED);
+        sendEmptyMessageDelayed(HIDE_STATUS, STATUS_HIDE_DELAYED);
     }
 
     /**
@@ -406,15 +367,15 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         isShowController = false;
         removeControllerMsg();
 
-        topLayout.setVisibility(View.INVISIBLE);
-        topLayout.startAnimation(topHideAnimo);
+        mTopLayout.setVisibility(View.INVISIBLE);
+        mTopLayout.startAnimation(topHideAnimo);
 
-        bottomLayout.setVisibility(View.INVISIBLE);
-        bottomLayout.startAnimation(bottomHideAnimo);
+        mBottomLayout.setVisibility(View.INVISIBLE);
+        mBottomLayout.startAnimation(bottomHideAnimo);
 
         // if (getRequestedOrientation() ==
         // ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-        // sendEmptyMessageDelayed(HIDE_STATUS, STATUS_SHOW_DELAYED);
+        sendEmptyMessageDelayed(HIDE_STATUS, STATUS_SHOW_DELAYED);
     }
 
     /**
@@ -439,57 +400,20 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
      * 显示状态栏
      */
     private void showStatus() {
-        // WindowManager.LayoutParams attrs = getWindow().getAttributes();
-        // attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        // getWindow().setAttributes(attrs);
-        // getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        getWindow().setAttributes(attrs);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
     /**
      * 隐藏状态栏
      */
     private void hideStatus() {
-        // WindowManager.LayoutParams attrs = getWindow().getAttributes();
-        // attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        // getWindow().setAttributes(attrs);
-        // getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-    }
-
-    /**
-     * 横屏
-     */
-    private void atyLandscape() {
-        removeControllerMsg();
-        showControllerView();
-        mDisplayAspectRatio = 2;
-        mVideoView.setDisplayAspectRatio(DISPLAYASPECTRATIO[mDisplayAspectRatio]);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT);
-        mVideoView.setLayoutParams(params);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         WindowManager.LayoutParams attrs = getWindow().getAttributes();
         attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
         getWindow().setAttributes(attrs);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-    }
-
-    /**
-     * 竖屏
-     */
-    private void atyPortrait() {
-        mDisplayAspectRatio = 0;
-        showStatus();
-        mVideoView.setDisplayAspectRatio(DISPLAYASPECTRATIO[mDisplayAspectRatio]);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                DensityUtils.dp2px(this, 220));
-        mVideoView.setLayoutParams(params);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        WindowManager.LayoutParams attrs = getWindow().getAttributes();
-        attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        getWindow().setAttributes(attrs);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
     @Override
@@ -504,13 +428,20 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
 
     @Override
     public void showError(String error) {
-
+        showToast(error);
     }
 
     @Override
     public void setPlayInfo(OldLiveVideoInfo oldLiveVideoInfo) {
         liveUrl = oldLiveVideoInfo.getData().getHls_url();
-//        initPlayer(liveUrl);
+        runOnUiThread(() -> initPlayer(liveUrl));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -718,64 +649,61 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         }
     };
 
-    private PLMediaPlayer.OnErrorListener mOnErrorListener = new PLMediaPlayer.OnErrorListener() {
-        @Override
-        public boolean onError(PLMediaPlayer plMediaPlayer, int errorCode) {
-            boolean isNeedReconnect = false;
-            Log.e(TAG, "Error happened, errorCode = " + errorCode);
-            switch (errorCode) {
-                case PLMediaPlayer.ERROR_CODE_INVALID_URI:
-                    showToastTips("无效的 URL");
-                    break;
-                case PLMediaPlayer.ERROR_CODE_404_NOT_FOUND:
-                    showToastTips("播放资源不存在");
-                    break;
-                case PLMediaPlayer.ERROR_CODE_CONNECTION_REFUSED:
-                    showToastTips("服务器拒绝连接");
-                    break;
-                case PLMediaPlayer.ERROR_CODE_CONNECTION_TIMEOUT:
-                    showToastTips("连接超时");
-                    isNeedReconnect = true;
-                    break;
-                case PLMediaPlayer.ERROR_CODE_EMPTY_PLAYLIST:
-                    showToastTips("空的播放列表");
-                    break;
-                case PLMediaPlayer.ERROR_CODE_STREAM_DISCONNECTED:
-                    showToastTips("与服务器连接断开");
-                    isNeedReconnect = true;
-                    break;
-                case PLMediaPlayer.ERROR_CODE_IO_ERROR:
-                    showToastTips("网络异常");
-                    isNeedReconnect = true;
-                    break;
-                case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:
-                    showToastTips("未授权，播放一个禁播的流");
-                    break;
-                case PLMediaPlayer.ERROR_CODE_PREPARE_TIMEOUT:
-                    showToastTips("播放器准备超时");
-                    isNeedReconnect = true;
-                    break;
-                case PLMediaPlayer.ERROR_CODE_READ_FRAME_TIMEOUT:
-                    showToastTips("读取数据超时");
-                    isNeedReconnect = true;
-                    break;
-                case PLMediaPlayer.ERROR_CODE_HW_DECODE_FAILURE:
-                    setOptions(AVOptions.MEDIA_CODEC_SW_DECODE);
-                    isNeedReconnect = true;
-                    break;
-                case PLMediaPlayer.MEDIA_ERROR_UNKNOWN:
-                    showToastTips("未知错误");
-                    break;
-                default:
-                    showToastTips("unknown error !");
-                    sendReconnectMessage();
-                    break;
-            }
-            if (isNeedReconnect && !isStopReconnet) {
+    private PLMediaPlayer.OnErrorListener mOnErrorListener = (plMediaPlayer, errorCode) -> {
+        boolean isNeedReconnect = false;
+        Log.e(TAG, "Error happened, errorCode = " + errorCode);
+        switch (errorCode) {
+            case PLMediaPlayer.ERROR_CODE_INVALID_URI:
+                showToastTips("无效的 URL");
+                break;
+            case PLMediaPlayer.ERROR_CODE_404_NOT_FOUND:
+                showToastTips("播放资源不存在");
+                break;
+            case PLMediaPlayer.ERROR_CODE_CONNECTION_REFUSED:
+                showToastTips("服务器拒绝连接");
+                break;
+            case PLMediaPlayer.ERROR_CODE_CONNECTION_TIMEOUT:
+                showToastTips("连接超时");
+                isNeedReconnect = true;
+                break;
+            case PLMediaPlayer.ERROR_CODE_EMPTY_PLAYLIST:
+                showToastTips("空的播放列表");
+                break;
+            case PLMediaPlayer.ERROR_CODE_STREAM_DISCONNECTED:
+                showToastTips("与服务器连接断开");
+                isNeedReconnect = true;
+                break;
+            case PLMediaPlayer.ERROR_CODE_IO_ERROR:
+                showToastTips("网络异常");
+                isNeedReconnect = true;
+                break;
+            case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:
+                showToastTips("未授权，播放一个禁播的流");
+                break;
+            case PLMediaPlayer.ERROR_CODE_PREPARE_TIMEOUT:
+                showToastTips("播放器准备超时");
+                isNeedReconnect = true;
+                break;
+            case PLMediaPlayer.ERROR_CODE_READ_FRAME_TIMEOUT:
+                showToastTips("读取数据超时");
+                isNeedReconnect = true;
+                break;
+            case PLMediaPlayer.ERROR_CODE_HW_DECODE_FAILURE:
+                setOptions(AVOptions.MEDIA_CODEC_SW_DECODE);
+                isNeedReconnect = true;
+                break;
+            case PLMediaPlayer.MEDIA_ERROR_UNKNOWN:
+                showToastTips("未知错误");
+                break;
+            default:
+                showToastTips("unknown error !");
                 sendReconnectMessage();
-            }
-            return true;
+                break;
         }
+        if (isNeedReconnect && !isStopReconnet) {
+            sendReconnectMessage();
+        }
+        return true;
     };
 
     private PLMediaPlayer.OnCompletionListener mOnCompletionListener = new PLMediaPlayer.OnCompletionListener() {
@@ -807,28 +735,7 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
 
         @Override
         public void onPrepared(PLMediaPlayer arg0) {
-            isFirstInitVideo = false;
-            mLodingDialog.dismiss();
-            showControllerView();
-            checkNet();
-            if (isWifi) {
-                loadingView.setVisibility(View.VISIBLE);
-                btnPlay.setImageResource(R.mipmap.icon_live_pause);
-                mVideoView.start();
-            } else {
-                if (isMoble) {
-                    if (isFlowPermission) {
-                        loadingView.setVisibility(View.VISIBLE);
-                        btnPlay.setImageResource(R.mipmap.icon_live_pause);
-                        mVideoView.start();
-                    } else {
-                        mVideoView.stopPlayback();
-                        mPermissionDialog.show();
-                    }
-                } else {
-                    Toast.makeText(mActivity, "请检查您的网络！", Toast.LENGTH_SHORT).show();
-                }
-            }
+
         }
     };
 
@@ -847,16 +754,13 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         if (System.currentTimeMillis() - lastTipsTime < 10000) {
             return;
         }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mToast != null) {
-                    mToast.cancel();
-                }
-                mToast = Toast.makeText(mActivity, tips, Toast.LENGTH_SHORT);
-                mToast.show();
-                lastTipsTime = System.currentTimeMillis();
+        runOnUiThread(() -> {
+            if (mToast != null) {
+                mToast.cancel();
             }
+            mToast = Toast.makeText(mActivity, tips, Toast.LENGTH_SHORT);
+            mToast.show();
+            lastTipsTime = System.currentTimeMillis();
         });
     }
 
@@ -871,8 +775,12 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
     protected void onResume() {
         super.onResume();
         mIsActivityPaused = false;
-//        if (!TextUtils.isEmpty(liveUrl))
-            initPlayer("http://hlsa.douyucdn.cn/live/48699rVxThLIEba9/playlist.m3u8?wsSecret=7c3b2b8f42bbc6631ed3528ebc4840fa&wsTime=1491043565&ct=cpn-pcclient");
+        if (!TextUtils.isEmpty(liveUrl))
+            initPlayer(liveUrl);
+
+        if (mDanmakuView != null) {
+            mDanmakuView.resume();
+        }
     }
 
     @Override
@@ -889,18 +797,9 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         // TODO Auto-generated method stub
         super.onStop();
         mVideoView.stopPlayback();
-        if (mfirstFragment.getIsOpenImput()) {
-            mfirstFragment.clearFocus();
+        if (mDanmakuView != null) {
+            mDanmakuView.pause();
         }
-    }
-
-    private void initSharePop() {
-        // TODO Auto-generated method stub
-        mPopupView = getLayoutInflater().inflate(R.layout.live_pop_view, null);
-        btnShareWchat = (TextView) mPopupView.findViewById(R.id.shareWchat);
-        btnShareQuan = (TextView) mPopupView.findViewById(R.id.shareQuan);
-        btnShareWchat.setOnClickListener(this);
-        btnShareQuan.setOnClickListener(this);
     }
 
     private void initPermissionDialog() {
@@ -908,83 +807,25 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
         View view = getLayoutInflater().inflate(R.layout.live_permission_dialog, null);
         TextView stop = (TextView) view.findViewById(R.id.dialog_stop);
         TextView play = (TextView) view.findViewById(R.id.dialog_play);
-        stop.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mVideoView.stopPlayback();
-                mPermissionDialog.dismiss();
-                isStopReconnet = true;
-                btnPlay.setImageResource(R.mipmap.icon_live_play);
-                isReconnect = false;
-            }
+        stop.setOnClickListener(v -> {
+            mVideoView.stopPlayback();
+            mPermissionDialog.dismiss();
+            isStopReconnet = true;
+            btnPlay.setImageResource(R.mipmap.icon_live_play);
+            isReconnect = false;
         });
-        play.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                mPermissionDialog.dismiss();
-                isReconnect = false;
-                isFlowPermission = true;
-                isStopReconnet = false;
-                mVideoView.stopPlayback();
-                initPlayer(liveUrl);
-            }
+        play.setOnClickListener(v -> {
+            // TODO Auto-generated method stub
+            mPermissionDialog.dismiss();
+            isReconnect = false;
+            isFlowPermission = true;
+            isStopReconnet = false;
+            mVideoView.stopPlayback();
+            initPlayer(liveUrl);
         });
         builder.setView(view);
         builder.setCancelable(false);
         mPermissionDialog = builder.create();
-    }
-
-    @Override
-    public void onBackPressed() {
-        backClick();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.shareWchat:
-//                shareToWChat(rtmpUrl);
-                break;
-            case R.id.shareQuan:
-
-                break;
-
-        }
-        mPopup.dismiss();
-    }
-
-    private void shareToWChat(String rtmpUrl) {
-        // WXTextObject textObj = new WXTextObject();
-        // textObj.text = text;
-        //
-        // WXMediaMessage msg = new WXMediaMessage();
-        // msg.mediaObject = textObj;
-        // msg.description = text;
-        //
-        // SendMessageToWX.Req req = new SendMessageToWX.Req();
-        // req.transaction = String.valueOf(System.currentTimeMillis());
-        // req.message = msg;
-        // req.scene = SendMessageToWX.Req.WXSceneSession;//WXSceneTimeline：发朋友圈
-        //
-        // Log.e("send", BBKApplication.api.sendReq(req) + "----");
-//        WXVideoObject videoObject = new WXVideoObject();
-//        videoObject.videoUrl = rtmpUrl;
-//
-//        WXMediaMessage msg = new WXMediaMessage(videoObject);
-//        msg.title = roomNo;
-//        msg.description = "视频描述";
-//        Bitmap thumb = BitmapFactory.decodeResource(getResources(), R.mipmap.icon_live_weixin);
-//        msg.thumbData = Util.bmpToByteArray(thumb, true);
-//
-//        SendMessageToWX.Req req = new SendMessageToWX.Req();
-//        req.transaction = String.valueOf(System.currentTimeMillis());
-//        req.message = msg;
-//        req.scene = SendMessageToWX.Req.WXSceneSession;// WXSceneTimeline：发朋友圈
-//
-//        BBKApplication.api.sendReq(req);
     }
 
     @Inject
@@ -998,6 +839,9 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
 
     @Override
     public void init() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        StatusBarUtil.setTransparent(this);
 
         lastTipsTime = System.currentTimeMillis();
 
@@ -1022,90 +866,27 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
 
     @Override
     public void initViews() {
-        topLayout = (RelativeLayout) findViewById(R.id.topLayout);
-        bottomLayout = (RelativeLayout) findViewById(R.id.bottomLayout);
-
-        initViewPager();
         initPermissionDialog();
-        initSharePop();
 
         mLodingDialog = DialogUtils.getLodingDialog(this);
         mLodingDialog.show();
         tvRoomNo.setText(getIntent().getStringExtra("roomName"));
 
         initRecever();
+
+        roomId = getIntent().getStringExtra("roomId");
+
+        initDanmu();
+    }
+
+    private void initDanmu() {
+        mDanmuProcess = new DanmuProcess(this, mDanmakuView, Integer.valueOf(roomId), 10);
+        mDanmuProcess.start();
     }
 
     @Override
     protected void initData() {
-        mPresenter.loadPlayInfo(getIntent().getStringExtra("roomId"));
-    }
-
-    private List<String> mTitleDatas;
-    private List<Fragment> mFragments;
-    private FirstFragment mfirstFragment;
-    private Fragment2 fragment2, fragment3;
-
-    @SuppressLint("NewApi")
-    private void initViewPager() {
-        mTitleDatas = new ArrayList<String>();
-        mTitleDatas.add("第一个");
-        mTitleDatas.add("第二二个");
-        mTitleDatas.add("三");
-
-        mFragments = new ArrayList<Fragment>();
-        mfirstFragment = new FirstFragment();
-        fragment2 = new Fragment2();
-        fragment3 = new Fragment2();
-        mFragments.add(mfirstFragment);
-        mFragments.add(fragment2);
-        mFragments.add(fragment3);
-
-        mViewPager.setAdapter(new LiveDetailPagerAdapter(getSupportFragmentManager(), mFragments));
-        CommonNavigator mCommonNavigator = new CommonNavigator(this);
-        mCommonNavigator.setAdjustMode(true);
-        mCommonNavigator.setAdapter(new CommonNavigatorAdapter() {
-
-            @Override
-            public IPagerTitleView getTitleView(Context context, final int index) {
-                SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-                simplePagerTitleView.setText(mTitleDatas.get(index));
-                simplePagerTitleView.setNormalColor(Color.GRAY);
-                simplePagerTitleView.setSelectedColor(Color.parseColor("#f57c00"));
-                simplePagerTitleView.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (mfirstFragment.getIsOpenImput()) {
-                            mfirstFragment.clearFocus();
-                        }
-                        mViewPager.setCurrentItem(index);
-                    }
-                });
-                return simplePagerTitleView;
-            }
-
-            @Override
-            public IPagerIndicator getIndicator(Context context) {
-                WrapPagerIndicator indicator = new WrapPagerIndicator(context);
-                indicator.setFillColor(Color.parseColor("#e3e3e3"));
-                // LinePagerIndicator indicator = new
-                // LinePagerIndicator(context);
-                // indicator.setColors(Color.parseColor("#f57c00"));
-                return indicator;
-            }
-
-            @Override
-            public int getCount() {
-                // TODO Auto-generated method stub
-                return mTitleDatas.size() == 0 ? 0 : mTitleDatas.size();
-            }
-        });
-        mIndicator.setNavigator(mCommonNavigator);
-        LinearLayout titleContainer = mCommonNavigator.getTitleContainer();
-        titleContainer.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-        titleContainer.setDividerPadding(UIUtil.dip2px(this, 15));
-        titleContainer.setDividerDrawable(getResources().getDrawable(R.drawable.simple_splitter));
-        ViewPagerHelper.bind(mIndicator, mViewPager);
+        mPresenter.loadPlayInfo(roomId);
     }
 
     private void initRecever() {
@@ -1137,7 +918,7 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
     @Override
     public int setLayoutRes() {
         // TODO Auto-generated method stub
-        return R.layout.activity_live_detail;
+        return R.layout.activity_phone_live_detail;
     }
 
     private void checkNet() {
@@ -1149,6 +930,15 @@ public class LivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPresent
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
+        mHandler.removeMessages(HIDE_CONTROLLER);
+        mHandler.removeMessages(HIDE_OPERATION);
+        mHandler.removeMessages(SHOW_STATUS);
+        mHandler.removeMessages(HIDE_STATUS);
+        mHandler.removeMessages(ANIMO_DELAYED);
         unregisterReceiver(mReceiver);
+        if (mDanmakuView != null) {
+            mDanmakuView.release();
+            mDanmakuView = null;
+        }
     }
 }

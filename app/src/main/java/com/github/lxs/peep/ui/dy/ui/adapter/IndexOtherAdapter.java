@@ -1,7 +1,6 @@
 package com.github.lxs.peep.ui.dy.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 import com.github.lxs.peep.image.GlideTransform;
-import com.github.lxs.peep.ui.dy.ui.LivePlayActivity;
 import com.zhy.autolayout.utils.AutoUtils;
 
 import java.util.List;

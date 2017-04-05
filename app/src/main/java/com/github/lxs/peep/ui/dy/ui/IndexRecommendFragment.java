@@ -20,7 +20,6 @@ import com.github.lxs.peep.ui.dy.presenter.IndexRecomPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.IndexRecommendAdapter;
 import com.github.lxs.peep.ui.dy.view.IIndexRecomView;
 import com.github.lxs.peep.widget.refresh.SmileyHeaderView;
-import com.socks.library.KLog;
 
 import java.util.List;
 

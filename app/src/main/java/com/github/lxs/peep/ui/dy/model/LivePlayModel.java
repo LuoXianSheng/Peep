@@ -27,6 +27,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by cl on 2017/4/1.
@@ -39,86 +40,37 @@ public class LivePlayModel {
         String str = "lapi/live/thirdPart/getPlay/" + roomId + "?aid=pcclient&rate=0&time=" + time + "9TUk5fjjUjg9qIMH3sdnh";
         String auth = MD5Util.getToMd5Low32(str);
 
-        Map<String, String> map = new HashMap<>();
-        map.put("aid", "pcclient");
-        map.put("auth", auth);
-        map.put("time", time + "");
+//        L.e("地址为:" + NetWorkApi.baseUrl + NetWorkApi.getLiveVideo + room_id + "?" + tempParams.toString());
+        Request requestPost = new Request.Builder()
+                .url(HttpUrl.oldBaseUrl + HttpUrl.getOldLiveVideo + roomId + "?rate=0")
+                .get()
+                .addHeader("aid", "pcclient")
+                .addHeader("auth", auth)
+                .addHeader("time", time + "")
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(requestPost).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                KLog.e(e.getMessage() + "---失败");
+            }
 
-        HttpUtils.getInstance()
-                .getRetofitClinet()
-                .setBaseUrl(HttpUrl.oldBaseUrl)
-                .builder(ApiManager.DyLiveApi.class)
-                .getLiveInfo(roomId, map)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
-                .subscribe(new MySubscriber<OldLiveVideoInfo>() {
-                    @Override
-                    public void onSuccess(OldLiveVideoInfo oldLiveVideoInfo) {
-                        listener.onLoadSuccess(oldLiveVideoInfo);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String json = response.body().string().toString();
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    if (jsonObject.getInt("error") == 0) {
+                        Gson gson = new Gson();
+                        OldLiveVideoInfo mLiveVideoInfo = gson.fromJson(json, OldLiveVideoInfo.class);
+                        listener.onLoadSuccess(mLiveVideoInfo);
+                    } else {
+                        listener.onLoadFailed("获取数据失败!");
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        KLog.e(e.getMessage());
-                    }
-                });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
-
-
-//        L.e("地址为:"+NetWorkApi.baseUrl + NetWorkApi.getLiveVideo + room_id+"?"+tempParams.toString());
-//        Request requestPost=new Request.Builder()
-//        .url(HttpUrl.oldBaseUrl+HttpUrl.getOldLiveVideo+roomId+"?rate=0")
-//        .get()
-//        .addHeader("aid","pcclient")
-//        .addHeader("auth",auth)
-//        .addHeader("time",time+"")
-//        .build();
-//        OkHttpClient client=new OkHttpClient();
-//        client.newCall(requestPost).enqueue(new Callback(){
-//@Override
-//public void onFailure(Call call,IOException e){
-//        KLog.e(e.getMessage());
-//        }
-//
-//@Override
-//public void onResponse(Call call,Response response)throws IOException{
-////                String result = response.body().string().toString();
-////                try {
-////                    JSONObject object = new JSONObject(result);
-////                    if (object.getInt("error") == 0) {
-////                        listener.onLoadSuccess(new Gson().fromJson(result, OldLiveVideoInfo.class));
-////                    }
-////                } catch (JSONException e) {
-////                    e.printStackTrace();
-////                }
-//        Observable.create(new Observable.OnSubscribe<String>(){
-//@Override
-//public void call(Subscriber<?super String>subscriber){
-//        String result=null;
-//        try{
-//        result=response.body().string().toString();
-//        }catch(IOException e){
-//        e.printStackTrace();
-//        }
-//        subscriber.onNext(result);
-//        subscriber.onCompleted();
-//        }
-//        }).subscribeOn(AndroidSchedulers.mainThread())
-//        .map(s->new Gson().fromJson(s,OldLiveVideoInfo.class))
-//        .subscribe(new MySubscriber<OldLiveVideoInfo>(){
-//@Override
-//public void onSuccess(OldLiveVideoInfo oldLiveVideoInfo){
-//        KLog.e("url-----"+oldLiveVideoInfo.getData());
-//        listener.onLoadSuccess(oldLiveVideoInfo);
-//        }
-//
-//@Override
-//public void onError(Throwable e){
-//        KLog.e(e.getMessage());
-//        }
-//        });
-//        }
-//        });
-//        }
-//        }

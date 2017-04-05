@@ -13,7 +13,7 @@ import com.github.lxs.peep.bean.dy.live.LiveAllList;
 import com.github.lxs.peep.di.component.DaggerDYFragmentComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.AllLivePresenter;
-import com.github.lxs.peep.ui.dy.ui.adapter.PubItemAdapter;
+import com.github.lxs.peep.ui.dy.ui.adapter.AllLiveAdapter;
 import com.github.lxs.peep.ui.dy.view.IAllLiveView;
 
 import java.util.ArrayList;
@@ -38,10 +38,11 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
     AllLivePresenter mPresenter;
 
 
-    private PubItemAdapter<LiveAllList> mAdapter;
+    private AllLiveAdapter<LiveAllList> mAdapter;
 
     private int start = 0;
     private int limit = 20;
+    private ArrayList<LiveAllList> mLists;
 
     public AllLiveFragment() {
     }
@@ -59,12 +60,17 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
     protected void initViews() {
         initRefresh();
 
-        mAdapter = new PubItemAdapter<>(new ArrayList<>(), mContext);
+        mLists = new ArrayList<>();
+        mAdapter = new AllLiveAdapter<>(mLists, mContext);
         mGridView.setAdapter(mAdapter);
 
         mGridView.setOnItemClickListener((parent, view, position, id) -> {
-            LiveAllList item = (LiveAllList) mAdapter.getItem(position);
-            Intent intent = new Intent(mContext, LivePlayActivity.class);
+            LiveAllList item = mLists.get(position);
+            Intent intent = new Intent();
+            if (item.getCate_id() == 201)
+                intent.setClass(mContext, PhoneLivePlayActivity.class);
+            else
+                intent.setClass(mContext, PcLivePlayActivity.class);
             intent.putExtra("roomName", item.getRoom_name());
             intent.putExtra("roomId", item.getRoom_id());
             mContext.startActivity(intent);
@@ -102,13 +108,18 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
 
     @Override
     public void setLiveData(List<LiveAllList> mLists) {
-        mAdapter.refreshData(mLists);
+        this.mLists.clear();
+        this.mLists.addAll(mLists);
+//        mAdapter.refreshData(this.mLists);
+        mAdapter.notifyDataSetChanged();
         mRefreshView.stopRefresh();
     }
 
     @Override
     public void loadMore(List<LiveAllList> mLists) {
-        mAdapter.loadMore(mLists);
+        this.mLists.addAll(mLists);
+//        mAdapter.loadMore(this.mLists);
+        mAdapter.notifyDataSetChanged();
         mRefreshView.stopLoadMore();
     }
 

@@ -16,7 +16,6 @@ import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.TabMenuPresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
 import com.github.lxs.peep.ui.dy.view.ITabMenuView;
-import com.socks.library.KLog;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;

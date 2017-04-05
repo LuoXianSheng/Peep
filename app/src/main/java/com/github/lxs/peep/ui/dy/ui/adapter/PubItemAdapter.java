@@ -2,6 +2,7 @@ package com.github.lxs.peep.ui.dy.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,8 @@ import com.bumptech.glide.Glide;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 import com.github.lxs.peep.bean.dy.live.LiveAllList;
-import com.github.lxs.peep.ui.dy.ui.LivePlayActivity;
+import com.github.lxs.peep.ui.dy.ui.PcLivePlayActivity;
+import com.github.lxs.peep.ui.dy.ui.PhoneLivePlayActivity;
 
 import java.util.List;
 
@@ -56,6 +58,31 @@ public class PubItemAdapter<T> extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.dy_room_item, parent, false);
             mHolder = new ViewHolder(convertView);
+            mHolder.mCardView.setOnClickListener(v -> {
+                Intent intent = new Intent(mContext, PcLivePlayActivity.class);
+                String roomName = "";
+                String roomId = "";
+                if (mList.get(position) instanceof HomeRecommendHotCate.RoomListEntity) {
+                    HomeRecommendHotCate.RoomListEntity item = (HomeRecommendHotCate.RoomListEntity) mList.get(position);
+                    roomName = item.getRoom_name();
+                    roomId = item.getRoom_id();
+                    if (item.getCate_id().equals("201"))
+                        intent.setClass(mContext, PhoneLivePlayActivity.class);
+                    else
+                        intent.setClass(mContext, PcLivePlayActivity.class);
+                } else if (mList.get(position) instanceof LiveAllList) {
+                    LiveAllList item = (LiveAllList) mList.get(position);
+                    roomName = item.getRoom_name();
+                    roomId = item.getRoom_id();
+                    if (item.getCate_id() == 201)
+                        intent.setClass(mContext, PhoneLivePlayActivity.class);
+                    else
+                        intent.setClass(mContext, PcLivePlayActivity.class);
+                }
+                intent.putExtra("roomName", roomName);
+                intent.putExtra("roomId", roomId);
+                mContext.startActivity(intent);
+            });
             convertView.setTag(mHolder);
         } else mHolder = (ViewHolder) convertView.getTag();
         String imgUrl = "";
@@ -99,6 +126,8 @@ public class PubItemAdapter<T> extends BaseAdapter {
     }
 
     class ViewHolder {
+        @BindView(R.id.cardView)
+        CardView mCardView;
         @BindView(R.id.room_img)
         ImageView mRoomImg;
         @BindView(R.id.tv_online_num)
