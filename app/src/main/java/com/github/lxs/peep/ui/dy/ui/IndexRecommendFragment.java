@@ -56,7 +56,7 @@ public class IndexRecommendFragment extends MvpFragment<IIndexRecomView, IndexRe
 
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_dy_refresh_listview, null);
+        return inflater.inflate(R.layout.fragment_refresh_listview, null);
     }
 
     @Override

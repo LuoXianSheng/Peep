@@ -30,7 +30,6 @@ public class LivePlayPresenter extends BasePresenter<ILivePlayView> {
         mLivePlayModel.loadPlayInfo(roomId, new OnLoadCompleteListener<OldLiveVideoInfo>() {
             @Override
             public void onLoadSuccess(OldLiveVideoInfo oldLiveVideoInfo) {
-                KLog.e("oldLiveVideoInfo--------------" + oldLiveVideoInfo);
                 mILivePlayView.setPlayInfo(oldLiveVideoInfo);
             }
 

@@ -6,6 +6,11 @@ package com.github.lxs.peep.http;
 
 public class HttpUrl {
 
+    /**
+     * 妹子base
+     */
+    public static final String GIRL_BASE_URL = "http://image.baidu.com/";
+
     //    Base地址
     public static String baseUrl="http://capi.douyucdn.cn";
 

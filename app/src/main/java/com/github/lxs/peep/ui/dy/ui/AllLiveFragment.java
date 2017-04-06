@@ -15,6 +15,7 @@ import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.AllLivePresenter;
 import com.github.lxs.peep.ui.dy.ui.adapter.AllLiveAdapter;
 import com.github.lxs.peep.ui.dy.view.IAllLiveView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,6 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
     @Inject
     AllLivePresenter mPresenter;
 
-
     private AllLiveAdapter<LiveAllList> mAdapter;
 
     private int start = 0;
@@ -53,7 +53,7 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
 
     @Override
     protected View initRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_dy_refresh_gridview, null);
+        return inflater.inflate(R.layout.fragment_refresh_gridview, null);
     }
 
     @Override
@@ -84,6 +84,7 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
 
             @Override
             public void onRefresh() {
+                start = 0;
                 mHandler.postDelayed(() -> initData(), 500);
             }
 
@@ -99,6 +100,7 @@ public class AllLiveFragment extends MvpFragment<IAllLiveView, AllLivePresenter>
         mRefreshView.setMoveForHorizontal(true);
         mRefreshView.setPinnedContent(true);
         mRefreshView.setSilenceLoadMore();
+        mRefreshView.setPreLoadCount(3);
     }
 
     @Override

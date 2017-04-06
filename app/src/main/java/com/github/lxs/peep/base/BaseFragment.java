@@ -39,15 +39,10 @@ public abstract class BaseFragment extends Fragment implements FragmentUserVisib
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = initRootView(inflater, container);
         unbinder = ButterKnife.bind(this, mRootView);
-        return mRootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         mContext = getActivity();
         mActivity = getActivity();
         init();
+        return mRootView;
     }
 
     protected void init() {

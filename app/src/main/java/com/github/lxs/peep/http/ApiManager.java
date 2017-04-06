@@ -15,6 +15,10 @@ import com.github.lxs.peep.bean.dy.live.LiveOtherColumn;
 import com.github.lxs.peep.bean.dy.live.LiveOtherList;
 import com.github.lxs.peep.bean.dy.live.LiveOtherTwoColumn;
 import com.github.lxs.peep.bean.dy.live.LiveSportsAllList;
+import com.github.lxs.peep.bean.girl.GirlInfo;
+import com.github.lxs.peep.bean.test;
+import com.github.lxs.peep.http.response.DyHttpResponse;
+import com.github.lxs.peep.http.response.GirlHttpResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +53,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeCateList)
-        Observable<HttpResponse<List<HomeCateList>>> getHomeCateList(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeCateList>>> getHomeCateList(@QueryMap Map<String, String> params);
 
         /**
          * 首页 列表详情页
@@ -57,7 +61,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeCate)
-        Observable<HttpResponse<List<HomeRecommendHotCate>>> getHomeCate(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeRecommendHotCate>>> getHomeCate(@QueryMap Map<String, String> params);
 
         /**
          * 首页   推荐轮播图
@@ -65,7 +69,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getCarousel)
-        Observable<HttpResponse<List<HomeCarousel>>> getCarousel(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeCarousel>>> getCarousel(@QueryMap Map<String, String> params);
 
         /**
          * 推荐---最热
@@ -73,7 +77,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeHotColumn)
-        Observable<HttpResponse<List<HomeHotColumn>>> getHotColumn(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeHotColumn>>> getHotColumn(@QueryMap Map<String, String> params);
 
         /**
          * 推荐---颜值
@@ -81,7 +85,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeFaceScoreColumn)
-        Observable<HttpResponse<List<HomeFaceScoreColumn>>> getFaceScoreColumn(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeFaceScoreColumn>>> getFaceScoreColumn(@QueryMap Map<String, String> params);
 
         /**
          * 推荐---热门 种类
@@ -89,7 +93,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeRecommendHotCate)
-        Observable<HttpResponse<List<HomeRecommendHotCate>>> getHotCate(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeRecommendHotCate>>> getHotCate(@QueryMap Map<String, String> params);
 
 
         /**
@@ -98,7 +102,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeColumnMoreCate)
-        Observable<HttpResponse<List<HomeColumnMoreTwoCate>>> getHomeColumnMoreCate(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeColumnMoreTwoCate>>> getHomeColumnMoreCate(@QueryMap Map<String, String> params);
 
         /**
          * 栏目 更多   --其他列表
@@ -106,7 +110,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeColumnMoreOtherList)
-        Observable<HttpResponse<List<HomeColumnMoreOtherList>>> getHomeColumnMoreOtherList(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeColumnMoreOtherList>>> getHomeColumnMoreOtherList(@QueryMap Map<String, String> params);
 
         /**
          * 栏目 更多   --全部列表
@@ -114,7 +118,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getHomeColumnMoreAllList + "{cate_id}")
-        Observable<HttpResponse<List<HomeColumnMoreAllList>>> getHomeColumnMoreAllList(@Path("cate_id") String cate_id, @QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<HomeColumnMoreAllList>>> getHomeColumnMoreAllList(@Path("cate_id") String cate_id, @QueryMap Map<String, String> params);
 
     }
 
@@ -125,7 +129,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getLiveOtherColumn)
-        Observable<HttpResponse<List<LiveOtherColumn>>> getLiveOtherColumn(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<LiveOtherColumn>>> getLiveOtherColumn(@QueryMap Map<String, String> params);
 
         /**
          * 全部直播
@@ -133,7 +137,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getLiveAllList)
-        Observable<HttpResponse<List<LiveAllList>>> getLiveAllList(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<LiveAllList>>> getLiveAllList(@QueryMap Map<String, String> params);
 
         /**
          * 直播其他栏目二级分类
@@ -141,7 +145,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getLiveOtherTwoColumn)
-        Observable<HttpResponse<List<LiveOtherTwoColumn>>> getLiveOtherTwoColumn(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<LiveOtherTwoColumn>>> getLiveOtherTwoColumn(@QueryMap Map<String, String> params);
 
         /**
          * 直播其他列表页
@@ -149,7 +153,7 @@ public interface ApiManager {
          * @return
          */
         @GET(getLiveOtherTwoList + "{cate_id}")
-        Observable<HttpResponse<List<LiveOtherList>>> getLiveOtherList(@Path("cate_id") String cate_id, @QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<LiveOtherList>>> getLiveOtherList(@Path("cate_id") String cate_id, @QueryMap Map<String, String> params);
 
         /**
          * 体育直播
@@ -157,11 +161,18 @@ public interface ApiManager {
          * @return
          */
         @GET(getLiveSportsAllList)
-        Observable<HttpResponse<List<LiveSportsAllList>>> getLiveSportsAllList(@QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<List<LiveSportsAllList>>> getLiveSportsAllList(@QueryMap Map<String, String> params);
 
 
         @GET("lapi/live/thirdPart/getPlay/{roomId}")
-        Observable<HttpResponse<OldLiveVideoInfo>> getLiveInfo(@Path("roomId") String cate_id, @QueryMap Map<String, String> params);
+        Observable<DyHttpResponse<OldLiveVideoInfo>> getLiveInfo(@Path("roomId") String cate_id, @QueryMap Map<String, String> params);
+    }
+
+    interface GirlApi {
+        //        http://image.baidu.com/channel/listjson?pn=2&rn=5&tag1=%E7%BE%8E%E5%A5%B3&tag2=%E5%85%A8%E9%83%A8&ie=utf8&qq-pf-to=pcqq.c2c
+        @GET("channel/listjson?ie=utf8")
+        Observable<String> getGirls(@Query("pn") int index, @Query("rn") int limit,
+                                  @Query("tag1") String tag1, @Query("tag2") String tag2);
     }
 
     @GET("top250")

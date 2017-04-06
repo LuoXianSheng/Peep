@@ -5,7 +5,7 @@ import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 import com.github.lxs.peep.http.ApiManager;
-import com.github.lxs.peep.http.HttpResponse;
+import com.github.lxs.peep.http.response.DyHttpResponse;
 import com.github.lxs.peep.http.HttpUtils;
 import com.github.lxs.peep.http.ParamsMapUtils;
 import com.github.lxs.peep.listener.MySubscriber;
@@ -32,10 +32,10 @@ public class IndexRecomModel {
                 .getCarousel(ParamsMapUtils.getHomeCarousel())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<HttpResponse<List<HomeCarousel>>, Observable<HomeCarousel>>() {
+                .flatMap(new Func1<DyHttpResponse<List<HomeCarousel>>, Observable<HomeCarousel>>() {
                     @Override
-                    public Observable<HomeCarousel> call(HttpResponse<List<HomeCarousel>> listHttpResponse) {
-                        return Observable.from(listHttpResponse.getData());
+                    public Observable<HomeCarousel> call(DyHttpResponse<List<HomeCarousel>> listDyHttpResponse) {
+                        return Observable.from(listDyHttpResponse.getData());
                     }
                 })
                 .map(HomeCarousel::getPic_url)
@@ -63,7 +63,7 @@ public class IndexRecomModel {
                 .getHotColumn(ParamsMapUtils.getDefaultParams())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .subscribe(new MySubscriber<List<HomeHotColumn>>() {
                     @Override
                     public void onSuccess(List<HomeHotColumn> homeHotColumns) {
@@ -85,7 +85,7 @@ public class IndexRecomModel {
                 .getFaceScoreColumn(ParamsMapUtils.getHomeFaceScoreColumn(offset, limit))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .subscribe(new MySubscriber<List<HomeFaceScoreColumn>>() {
                     @Override
                     public void onSuccess(List<HomeFaceScoreColumn> columns) {
@@ -107,7 +107,7 @@ public class IndexRecomModel {
                 .getHotCate(ParamsMapUtils.getDefaultParams())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .subscribe(new MySubscriber<List<HomeRecommendHotCate>>() {
                     @Override
                     public void onSuccess(List<HomeRecommendHotCate> homeRecommendHotCates) {

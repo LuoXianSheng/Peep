@@ -12,6 +12,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.BaseActivity;
 import com.github.lxs.peep.ui.dy.ui.DYFragment;
+import com.github.lxs.peep.ui.girl.ui.GirlFragment;
 import com.github.lxs.peep.ui.wb.ui.TwoFragment;
 import com.github.lxs.peep.utils.StatusBarUtil;
 
@@ -56,7 +57,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         mNavigationBar.addItem(new BottomNavigationItem(R.mipmap.icon_dy, "Home").setActiveColor(Color.parseColor("#FF7700")))
                 .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "Books").setActiveColor(Color.parseColor("#02BF5B")))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_dy, "Music").setActiveColor(Color.DKGRAY))
-                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "TV").setActiveColor(Color.YELLOW))
+                .addItem(new BottomNavigationItem(R.mipmap.ic_launcher, "TV").setActiveColor(Color.RED))
                 .initialise();
         mNavigationBar.setTabSelectedListener(this);
     }
@@ -78,6 +79,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             StatusBarUtil.setColor(this, Color.parseColor("#FF7700"), 0);
         else if (position == 1)
             StatusBarUtil.setColor(this, Color.parseColor("#02BF5B"), 0);
+        else if (position == 3)
+            StatusBarUtil.setColor(this, Color.parseColor("#ff0000"), 0);
     }
 
     @Override
@@ -100,7 +103,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         else if (position == 2)
             mSparseArray.append(position, new TwoFragment());
         else if (position == 3)
-            mSparseArray.append(position, new TwoFragment());
+            mSparseArray.append(position, new GirlFragment());
         else return null;
         return mSparseArray.get(position);
     }

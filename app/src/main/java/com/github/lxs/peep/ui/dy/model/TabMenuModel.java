@@ -3,7 +3,7 @@ package com.github.lxs.peep.ui.dy.model;
 import com.github.lxs.peep.bean.dy.index.HomeCateList;
 import com.github.lxs.peep.bean.dy.live.LiveOtherColumn;
 import com.github.lxs.peep.http.ApiManager;
-import com.github.lxs.peep.http.HttpResponse;
+import com.github.lxs.peep.http.response.DyHttpResponse;
 import com.github.lxs.peep.http.HttpUtils;
 import com.github.lxs.peep.http.ParamsMapUtils;
 import com.github.lxs.peep.listener.MySubscriber;
@@ -28,7 +28,7 @@ public class TabMenuModel {
                 .getHomeCateList(ParamsMapUtils.getDefaultParams())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .subscribe(new MySubscriber<List<HomeCateList>>() {
                     @Override
                     public void onSuccess(List<HomeCateList> homeCateLists) {
@@ -51,7 +51,7 @@ public class TabMenuModel {
                 .getLiveOtherColumn(ParamsMapUtils.getDefaultParams())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .subscribe(new MySubscriber<List<LiveOtherColumn>>() {
                     @Override
                     public void onSuccess(List<LiveOtherColumn> liveOtherColumns) {

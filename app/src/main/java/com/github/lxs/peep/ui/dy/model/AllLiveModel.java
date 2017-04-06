@@ -2,7 +2,7 @@ package com.github.lxs.peep.ui.dy.model;
 
 import com.github.lxs.peep.bean.dy.live.LiveAllList;
 import com.github.lxs.peep.http.ApiManager;
-import com.github.lxs.peep.http.HttpResponse;
+import com.github.lxs.peep.http.response.DyHttpResponse;
 import com.github.lxs.peep.http.HttpUtils;
 import com.github.lxs.peep.http.ParamsMapUtils;
 import com.github.lxs.peep.listener.MySubscriber;
@@ -12,7 +12,6 @@ import com.socks.library.KLog;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -27,7 +26,7 @@ public class AllLiveModel {
                 .builder(ApiManager.DyLiveApi.class)
                 .getLiveAllList(ParamsMapUtils.getHomeFaceScoreColumn(start, limit))
                 .subscribeOn(Schedulers.io())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MySubscriber<List<LiveAllList>>() {
                     @Override

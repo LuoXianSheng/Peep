@@ -2,7 +2,7 @@ package com.github.lxs.peep.ui.dy.model;
 
 import com.github.lxs.peep.bean.dy.index.HomeRecommendHotCate;
 import com.github.lxs.peep.http.ApiManager;
-import com.github.lxs.peep.http.HttpResponse;
+import com.github.lxs.peep.http.response.DyHttpResponse;
 import com.github.lxs.peep.http.HttpUtils;
 import com.github.lxs.peep.http.ParamsMapUtils;
 import com.github.lxs.peep.listener.MySubscriber;
@@ -27,7 +27,7 @@ public class IndexOtherMenuModel {
                 .getHomeCate(ParamsMapUtils.getHomeCate(type))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(HttpResponse::getData)
+                .map(DyHttpResponse::getData)
                 .subscribe(new MySubscriber<List<HomeRecommendHotCate>>() {
                     @Override
                     public void onSuccess(List<HomeRecommendHotCate> homeRecommendHotCates) {
