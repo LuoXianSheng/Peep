@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
 import com.github.lxs.peep.ui.dy.ui.PcLivePlayActivity;
@@ -75,6 +76,7 @@ public class HotAdapter extends BaseAdapter {
 
         Glide.with(mContext)
                 .load(item.getRoom_src())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .crossFade()
                 .into(mHolder.mRoomImg);
         if (item.getCate_id().equals("201")) mHolder.mMobleLive.setVisibility(View.VISIBLE);

@@ -14,7 +14,7 @@ import com.github.lxs.peep.bean.dy.index.HomeCateList;
 import com.github.lxs.peep.di.component.DaggerDYFragmentComponent;
 import com.github.lxs.peep.di.module.DYModule;
 import com.github.lxs.peep.ui.dy.presenter.TabMenuPresenter;
-import com.github.lxs.peep.ui.dy.ui.adapter.DYFragmentAdapter;
+import com.github.lxs.peep.ui.dy.ui.adapter.FragmentAdapter;
 import com.github.lxs.peep.ui.dy.view.ITabMenuView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -50,7 +50,7 @@ public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> i
     @Inject
     TabMenuPresenter mPresenter;
 
-    private DYFragmentAdapter mAdapter;
+    private FragmentAdapter mAdapter;
     private ArrayList<Fragment> mFragments;
     private String[] titles;
 
@@ -87,7 +87,7 @@ public class IndexFragment extends MvpFragment<ITabMenuView, TabMenuPresenter> i
         }
 
         mIndexViewpager.setOffscreenPageLimit(titles.length);
-        mAdapter = new DYFragmentAdapter(getChildFragmentManager(), mFragments);
+        mAdapter = new FragmentAdapter(getChildFragmentManager(), mFragments);
         mIndexViewpager.setAdapter(mAdapter);
 
         initIndicator();

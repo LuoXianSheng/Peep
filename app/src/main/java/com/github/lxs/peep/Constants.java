@@ -9,4 +9,5 @@ public class Constants {
 
     public static String HTTP_CACHE_PATH = SDCardUtils.getSDCardPath() + "/peep/httpCache";
 
+    public static String DOWNLOAD_PATH = SDCardUtils.getSDCardPath() + "/peep/download";
 }

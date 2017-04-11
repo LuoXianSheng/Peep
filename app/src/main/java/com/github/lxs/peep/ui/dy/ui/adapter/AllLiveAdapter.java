@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.live.LiveAllList;
 
@@ -75,6 +76,7 @@ public class AllLiveAdapter<T> extends BaseAdapter {
         Glide.with(mContext)
                 .load(imgUrl)
                 .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.mipmap.dy_img_loading)
                 .error(R.mipmap.dy_img_loading_error)
                 .into(mHolder.mRoomImg);

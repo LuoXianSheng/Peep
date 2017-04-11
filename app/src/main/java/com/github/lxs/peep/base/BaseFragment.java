@@ -14,8 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.github.lxs.peep.App;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.utils.FragmentUserVisibleController;
+import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -88,9 +90,10 @@ public abstract class BaseFragment extends Fragment implements FragmentUserVisib
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        RefWatcher refWatcher = App.sRefWatcher;
-//        refWatcher.watch(this);
         unbinder.unbind();
+
+        RefWatcher refWatcher = App.getRefWatcher(mContext);
+        refWatcher.watch(this);
     }
 
     @Override

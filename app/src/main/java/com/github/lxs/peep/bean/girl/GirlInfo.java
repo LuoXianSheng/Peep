@@ -1,12 +1,15 @@
 package com.github.lxs.peep.bean.girl;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by cl on 2017/4/6.
  */
 
-public class GirlInfo {
+public class GirlInfo implements Parcelable {
     /**
      * id : 9406060990
      * setId : -1
@@ -127,7 +130,7 @@ public class GirlInfo {
     private String desc_info;
     private int isAdapted;
     private List<String> tags;
-    private List<?> other_urls;
+    private List other_urls;
 
     public String getId() {
         return id;
@@ -593,11 +596,11 @@ public class GirlInfo {
         this.tags = tags;
     }
 
-    public List<?> getOther_urls() {
+    public List getOther_urls() {
         return other_urls;
     }
 
-    public void setOther_urls(List<?> other_urls) {
+    public void setOther_urls(List other_urls) {
         this.other_urls = other_urls;
     }
 
@@ -665,4 +668,147 @@ public class GirlInfo {
                 ", other_urls=" + other_urls +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.setId);
+        dest.writeInt(this.pn);
+        dest.writeString(this.abs);
+        dest.writeString(this.desc);
+        dest.writeString(this.tag);
+        dest.writeString(this.date);
+        dest.writeString(this.like_num);
+        dest.writeString(this.is_single);
+        dest.writeString(this.fashion_id);
+        dest.writeString(this.dress_id);
+        dest.writeString(this.fushi_obj_num);
+        dest.writeString(this.fushi_obj_array);
+        dest.writeString(this.dress_buy_link);
+        dest.writeString(this.dress_price);
+        dest.writeString(this.dress_tag);
+        dest.writeString(this.dress_num);
+        dest.writeString(this.dress_discount);
+        dest.writeString(this.dress_other);
+        dest.writeString(this.dress_extend_type);
+        dest.writeString(this.dress_extend_name);
+        dest.writeString(this.children_vote);
+        dest.writeString(this.dislike_num);
+        dest.writeString(this.image_url);
+        dest.writeInt(this.image_width);
+        dest.writeInt(this.image_height);
+        dest.writeString(this.download_url);
+        dest.writeString(this.thumbnail_url);
+        dest.writeInt(this.thumbnail_width);
+        dest.writeInt(this.thumbnail_height);
+        dest.writeInt(this.thumb_large_width);
+        dest.writeInt(this.thumb_large_height);
+        dest.writeString(this.thumb_large_url);
+        dest.writeString(this.site_name);
+        dest.writeString(this.site_logo);
+        dest.writeString(this.site_url);
+        dest.writeString(this.from_url);
+        dest.writeString(this.obj_url);
+        dest.writeString(this.share_url);
+        dest.writeInt(this.download_num);
+        dest.writeInt(this.collect_num);
+        dest.writeInt(this.start_index);
+        dest.writeInt(this.return_number);
+        dest.writeString(this.album_di);
+        dest.writeString(this.can_album_id);
+        dest.writeString(this.album_obj_num);
+        dest.writeString(this.user_id);
+        dest.writeString(this.app_id);
+        dest.writeString(this.colum);
+        dest.writeString(this.photo_id);
+        dest.writeInt(this.is_album);
+        dest.writeInt(this.is_vip);
+        dest.writeInt(this.from_name);
+        dest.writeString(this.hostname);
+        dest.writeString(this.parent_tag);
+        dest.writeString(this.desc_info);
+        dest.writeInt(this.isAdapted);
+        dest.writeStringList(this.tags);
+    }
+
+    public GirlInfo() {
+    }
+
+    protected GirlInfo(Parcel in) {
+        this.id = in.readString();
+        this.setId = in.readString();
+        this.pn = in.readInt();
+        this.abs = in.readString();
+        this.desc = in.readString();
+        this.tag = in.readString();
+        this.date = in.readString();
+        this.like_num = in.readString();
+        this.is_single = in.readString();
+        this.fashion_id = in.readString();
+        this.dress_id = in.readString();
+        this.fushi_obj_num = in.readString();
+        this.fushi_obj_array = in.readString();
+        this.dress_buy_link = in.readString();
+        this.dress_price = in.readString();
+        this.dress_tag = in.readString();
+        this.dress_num = in.readString();
+        this.dress_discount = in.readString();
+        this.dress_other = in.readString();
+        this.dress_extend_type = in.readString();
+        this.dress_extend_name = in.readString();
+        this.children_vote = in.readString();
+        this.dislike_num = in.readString();
+        this.image_url = in.readString();
+        this.image_width = in.readInt();
+        this.image_height = in.readInt();
+        this.download_url = in.readString();
+        this.thumbnail_url = in.readString();
+        this.thumbnail_width = in.readInt();
+        this.thumbnail_height = in.readInt();
+        this.thumb_large_width = in.readInt();
+        this.thumb_large_height = in.readInt();
+        this.thumb_large_url = in.readString();
+        this.site_name = in.readString();
+        this.site_logo = in.readString();
+        this.site_url = in.readString();
+        this.from_url = in.readString();
+        this.obj_url = in.readString();
+        this.share_url = in.readString();
+        this.download_num = in.readInt();
+        this.collect_num = in.readInt();
+        this.start_index = in.readInt();
+        this.return_number = in.readInt();
+        this.album_di = in.readString();
+        this.can_album_id = in.readString();
+        this.album_obj_num = in.readString();
+        this.user_id = in.readString();
+        this.app_id = in.readString();
+        this.colum = in.readString();
+        this.photo_id = in.readString();
+        this.is_album = in.readInt();
+        this.is_vip = in.readInt();
+        this.from_name = in.readInt();
+        this.hostname = in.readString();
+        this.parent_tag = in.readString();
+        this.desc_info = in.readString();
+        this.isAdapted = in.readInt();
+        this.tags = in.createStringArrayList();
+    }
+
+    public static final Parcelable.Creator<GirlInfo> CREATOR = new Parcelable.Creator<GirlInfo>() {
+        @Override
+        public GirlInfo createFromParcel(Parcel source) {
+            return new GirlInfo(source);
+        }
+
+        @Override
+        public GirlInfo[] newArray(int size) {
+            return new GirlInfo[size];
+        }
+    };
 }

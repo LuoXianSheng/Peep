@@ -27,7 +27,6 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
 
     protected abstract P createPresenter();
 
-
     protected int delayedTime = 0;
 
     public void setDelayedTime(int delayedTime) {
@@ -88,47 +87,38 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
     }
 
 
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//
-//        if (getUserVisibleHint()) {
-//            isVisible = true;
-//            onVisible();
-//        } else {
-//            isVisible = false;
-//            onInvisible();
-//        }
-//    }
-
-//    /**
-//     * 可见
-//     */
-//    protected void onVisible() {
-//
-//    }
-//
-//    /**
-//     * 不可见
-//     */
-//    protected void onInvisible() {
-//
-//    }
-
     @Override
-    public void onVisibleToUserChanged(boolean isVisibleToUser, boolean invokeInResumeOrPause) {
-        if (isVisibleToUser) {
-            if (isLoadData) return;
-            showLoadView();
-            mRunnable = () -> {
-                isLoadData = true;
-                super.init();
-            };
-            mHandler.postDelayed(mRunnable, delayedTime);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (getUserVisibleHint()) {
+            isVisible = true;
+            onVisible();
         } else {
-            if (isLoadData) return;
-            mHandler.removeCallbacks(mRunnable);
+            isVisible = false;
+            onInvisible();
         }
+    }
+
+    /**
+     * 可见
+     */
+    protected void onVisible() {
+        if (isLoadData) return;
+        showLoadView();
+        mRunnable = () -> {
+            isLoadData = true;
+            super.init();
+        };
+        mHandler.postDelayed(mRunnable, delayedTime);
+    }
+
+    /**
+     * 不可见
+     */
+    protected void onInvisible() {
+        if (isLoadData) return;
+        mHandler.removeCallbacks(mRunnable);
     }
 
     @Override
@@ -137,5 +127,6 @@ public abstract class MvpFragment<V extends BaseView, P extends BasePresenter<V>
         if (mPresenter != null) {
             mPresenter.onDestroy();
         }
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

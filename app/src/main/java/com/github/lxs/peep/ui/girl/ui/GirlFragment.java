@@ -1,5 +1,7 @@
 package com.github.lxs.peep.ui.girl.ui;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,6 @@ import com.github.lxs.peep.di.module.GirlModel;
 import com.github.lxs.peep.ui.girl.presenter.GirlPresenter;
 import com.github.lxs.peep.ui.girl.ui.adapter.Girladapter;
 import com.github.lxs.peep.ui.girl.view.IGirlView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class GirlFragment extends MvpFragment<IGirlView, GirlPresenter> implemen
     private String tag1 = "美女", tag2 = "全部";
 
     private Girladapter mGirladapter;
-    private List<GirlInfo> mLists;
+    private ArrayList<GirlInfo> mLists;
 
     @Inject
     GirlPresenter mPresenter;
@@ -56,6 +57,16 @@ public class GirlFragment extends MvpFragment<IGirlView, GirlPresenter> implemen
         mLists = new ArrayList<>();
         mGirladapter = new Girladapter(mContext, mLists);
         mGridView.setAdapter(mGirladapter);
+
+        mGridView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(mActivity, PhotoActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("mLists", mLists);
+            intent.putExtras(bundle);
+            intent.putExtra("pos", position);
+            startActivity(intent);
+            mActivity.overridePendingTransition(R.anim.bottom_in, R.anim.top_out);
+        });
     }
 
     private void initRefresh() {
@@ -89,7 +100,6 @@ public class GirlFragment extends MvpFragment<IGirlView, GirlPresenter> implemen
     public void setDatas(List<GirlInfo> mDatas) {
         mActivity.runOnUiThread(() -> {
             this.mLists.clear();
-            KLog.e(mDatas.size() + "---" + mLists.size());
             this.mLists.addAll(mDatas);
             mGirladapter.notifyDataSetChanged();
             mRefreshView.stopRefresh();
@@ -99,7 +109,6 @@ public class GirlFragment extends MvpFragment<IGirlView, GirlPresenter> implemen
     @Override
     public void loadMore(List<GirlInfo> mDatas) {
         mActivity.runOnUiThread(() -> {
-            KLog.e(mDatas.size() + "---" + mLists.size());
             this.mLists.addAll(mDatas);
             mGirladapter.notifyDataSetChanged();
             mRefreshView.stopLoadMore();
@@ -125,5 +134,14 @@ public class GirlFragment extends MvpFragment<IGirlView, GirlPresenter> implemen
     protected GirlPresenter createPresenter() {
         DaggerGirlFragmentComponent.builder().girlModel(new GirlModel(this)).build().inject(this);
         return mPresenter;
+    }
+
+    @Override
+    public void onVisibleToUserChanged(boolean isVisibleToUser, boolean invokeInResumeOrPause) {
+        if (isVisibleToUser) {
+            super.onVisible();
+        } else {
+            super.onInvisible();
+        }
     }
 }

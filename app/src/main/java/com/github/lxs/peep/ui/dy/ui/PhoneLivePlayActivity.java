@@ -7,10 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,14 +18,12 @@ import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -930,11 +926,7 @@ public class PhoneLivePlayActivity extends MvpActivity<ILivePlayView, LivePlayPr
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        mHandler.removeMessages(HIDE_CONTROLLER);
-        mHandler.removeMessages(HIDE_OPERATION);
-        mHandler.removeMessages(SHOW_STATUS);
-        mHandler.removeMessages(HIDE_STATUS);
-        mHandler.removeMessages(ANIMO_DELAYED);
+        mHandler.removeCallbacksAndMessages(null);
         unregisterReceiver(mReceiver);
         if (mDanmakuView != null) {
             mDanmakuView.release();

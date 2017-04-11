@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import com.andview.refreshview.XRefreshView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.base.MvpFragment;
 import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
@@ -99,6 +100,7 @@ public class IndexRecommendFragment extends MvpFragment<IIndexRecomView, IndexRe
                         .placeholder(R.mipmap.dy_img_loading)
                         .error(R.mipmap.dy_img_loading_error)
                         .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(itemView);
             }
         });
@@ -178,7 +180,13 @@ public class IndexRecommendFragment extends MvpFragment<IIndexRecomView, IndexRe
 
     @Override
     public void onStop() {
-        Glide.with(mContext).pauseRequests();
+        Glide.with(IndexRecommendFragment.this).pauseRequests();
         super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Glide.with(IndexRecommendFragment.this).resumeRequests();
     }
 }

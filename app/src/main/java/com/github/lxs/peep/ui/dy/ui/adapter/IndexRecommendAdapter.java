@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
 import com.github.lxs.peep.bean.dy.index.HomeHotColumn;
@@ -131,6 +132,7 @@ public class IndexRecommendAdapter extends BaseAdapter {
                 Glide.with(mContext)
                         .load(item.getIcon_url())
                         .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .transform(new GlideTransform(mContext, GlideTransform.CIRCLE))
                         .into(mHolder.mItemIcon);
                 break;

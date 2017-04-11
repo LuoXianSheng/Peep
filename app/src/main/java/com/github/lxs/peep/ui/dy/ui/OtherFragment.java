@@ -54,7 +54,6 @@ public class OtherFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        KLog.e("初始化数据");
         int room_id = 522423;
         int time = (int) (System.currentTimeMillis() / 1000);
         String str = "lapi/live/thirdPart/getPlay/" + room_id + "?aid=pcclient&rate=0&time=" + time + "9TUk5fjjUjg9qIMH3sdnh";

@@ -45,7 +45,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void initViews() {
         StatusBarUtil.setColor(this, Color.parseColor("#FF7700"), 0);
-//        changeTheme(R.style.DbTheme);
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().add(R.id.layFrame, buildFragment(0)).commitAllowingStateLoss();
         initNavigationBar();
@@ -79,6 +78,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             StatusBarUtil.setColor(this, Color.parseColor("#FF7700"), 0);
         else if (position == 1)
             StatusBarUtil.setColor(this, Color.parseColor("#02BF5B"), 0);
+        else if (position == 2)
+            StatusBarUtil.setColor(this, Color.DKGRAY, 0);
         else if (position == 3)
             StatusBarUtil.setColor(this, Color.parseColor("#ff0000"), 0);
     }
@@ -108,4 +109,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         return mSparseArray.get(position);
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

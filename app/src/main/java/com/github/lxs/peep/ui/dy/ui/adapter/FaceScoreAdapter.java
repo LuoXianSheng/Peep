@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.lxs.peep.R;
 import com.github.lxs.peep.bean.dy.index.HomeFaceScoreColumn;
 import com.github.lxs.peep.ui.dy.ui.PcLivePlayActivity;
@@ -75,6 +76,7 @@ public class FaceScoreAdapter extends BaseAdapter {
         Glide.with(mContext)
                 .load(item.getVertical_src())
                 .crossFade(300)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .placeholder(R.mipmap.dy_img_loading_big)
                 .error(R.mipmap.dy_img_loading_error_big)
                 .into(mHolder.mRoomImg);

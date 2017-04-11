@@ -1,6 +1,6 @@
 package com.github.lxs.peep.listener;
 
-import rx.Observable;
+
 import rx.Subscriber;
 
 /**

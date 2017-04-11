@@ -1,15 +1,18 @@
 package com.github.lxs.peep;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.github.lxs.peep.http.HttpUrl;
 import com.github.lxs.peep.http.HttpUtils;
 import com.github.lxs.peep.http.NetWorkConfiguration;
 import com.socks.library.KLog;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 public class App extends Application {
 
-//    public static RefWatcher sRefWatcher;
+    private RefWatcher mRefWatcher;
 
 
     private static App application;
@@ -22,12 +25,7 @@ public class App extends Application {
         // 初始化log
         KLog.init(Constants.SHOW_DEBUG, "Peep");
 
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            // This process is dedicated to LeakCanary for heap analysis.
-//            // You should not init your app in this process.
-//            return;
-//        }
-//        sRefWatcher = LeakCanary.install(this);
+        mRefWatcher = LeakCanary.install(this);
 
         initOkHttp();
     }
@@ -43,5 +41,11 @@ public class App extends Application {
 
     public static App getApplication() {
         return application;
+    }
+
+    public static RefWatcher getRefWatcher(Context context) {
+        App application = (App) context
+                .getApplicationContext();
+        return application.mRefWatcher;
     }
 }
